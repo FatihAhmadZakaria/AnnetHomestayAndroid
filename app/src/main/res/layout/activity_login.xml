@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityLogin">
+    <ImageView
+        android:id="@+id/img_login"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/annet_logo"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:elevation="15dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="10dp">
+            <EditText
+                android:id="@+id/et_log_email"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Masukan email"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/et_rounded"
+                android:paddingStart="10dp"/>
+            <EditText
+                android:id="@+id/et_log_password"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Masukan password"
+                android:inputType="textPassword"
+                android:layout_below="@+id/et_log_email"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/et_rounded"
+                android:paddingStart="10dp"/>
+            <Button
+                android:id="@+id/bt_login"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Login"
+                android:layout_gravity="bottom"
+                android:background="@drawable/bt_rounded"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:layout_below="@+id/et_log_password"/>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="horizontal">-->
+<!--&lt;!&ndash;                <ImageView&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width=""&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height=""&ndash;&gt;-->
+<!--            </LinearLayout>-->
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
