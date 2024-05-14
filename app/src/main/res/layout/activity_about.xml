@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityAbout">
+    <LinearLayout
+        android:id="@+id/head_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/main_red">
+        <ImageView
+            android:id="@+id/ic_back_about"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_back"
+            android:layout_margin="15dp"/>
+        <TextView
+            android:id="@+id/text_about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_head"
+            android:textSize="17sp"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:layout_below="@+id/head_about">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_desc"
+            android:layout_marginHorizontal="15dp"
+            android:textColor="@color/black"
+            android:justificationMode="inter_word"
+            android:layout_marginTop="15dp"
+            tools:ignore="UnusedAttribute" />
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
