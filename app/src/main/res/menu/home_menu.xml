@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/paket"
+        android:title="Paket Sewa"
+        android:icon="@drawable/ic_rent"/>
+    <item android:id="@+id/object_rec"
+        android:title="Rekomendasi"
+        android:icon="@drawable/ic_object_rec"/>
+    <item android:id="@+id/motocycle"
+        android:title="Motor"
+        android:icon="@drawable/ic_motocycle"/>
+</menu>
