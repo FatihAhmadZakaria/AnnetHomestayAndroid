@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityPilihO">
+
+    <LinearLayout
+        android:id="@+id/head_rek_obj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/main_red"
+        android:layout_alignParentTop="true">
+        <ImageView
+            android:id="@+id/ic_back_objek"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_back"
+            android:layout_margin="15dp"/>
+        <TextView
+            android:id="@+id/text_about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rek_obj"
+            android:textSize="17sp"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list_rek_obj"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/head_rek_obj"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="10dp"
+        tools:listitem="@layout/list_rek_obj"/>
+
+</RelativeLayout>

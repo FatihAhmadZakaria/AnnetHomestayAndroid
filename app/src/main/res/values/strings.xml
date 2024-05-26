@@ -4,16 +4,22 @@
     <string name="inp_uname">Masukan username</string>
     <string name="inp_email">Masukan email</string>
     <string name="inp_pass">Masukan password</string>
-    <string name="belum_daftar">Belum memiliki akun? Register!</string>
-    <string name="sudah_daftar">Sudah memiliki akun? Login!</string>
+    <string name="belum_daftar">Belum memiliki akun?</string>
+    <string name="sudah_daftar">Sudah memiliki akun?</string>
     <string name="log">Login</string>
     <string name="reg">Register</string>
     <string name="about_head">About us</string>
+    <string name="about_promo">Promo</string>
+    <string name="rek_obj">Rekomendasi Objek Sekitar</string>
     <string name="about_desc">\t\tSelamat datang di Annet Homestay, sebuah tempat di mana keindahan alam bertemu dengan ketenangan pedesaan. Terletak dengan sempurna di tengah-tengah keindahan alam Indonesia, homestay kami menawarkan pengalaman menginap yang tak terlupakan bagi setiap tamu.
         \n\n\t\tDengan pemandangan langsung yang memukau ke Gunung Merapi, tamu kami dapat menikmati keindahan alam yang menakjubkan sepanjang waktu. Udara segar dan sejuk dari pedesaan sekitar memberikan kesempatan bagi tamu untuk bernapas lega dan merasakan kedamaian yang langka di tengah kehidupan yang sibuk.
         \n\n\t\tAnnet Homestay bukan hanya sekadar tempat menginap, tapi juga tempat untuk terhubung kembali dengan alam dan budaya lokal. Dikelilingi oleh kebun yang hijau dan alam yang mempesona, tamu kami dapat menjelajahi lingkungan sekitar, berinteraksi dengan penduduk setempat, dan menikmati kegiatan-kegiatan alam yang menyegarkan.
         \n\n\t\tTersedia berbagai macam akomodasi yang nyaman dan fasilitas yang lengkap untuk memenuhi kebutuhan setiap tamu, mulai dari kamar-kamar yang bersih dan nyaman hingga ruang terbuka untuk bersantai. Dengan staf yang ramah dan penuh perhatian, kami berkomitmen untuk memberikan pengalaman menginap yang istimewa dan memuaskan bagi setiap tamu.
         \n\n\t\tMari bergabung dengan kami di Annet Homestay dan rasakan keindahan alam yang menakjubkan, kedamaian pedesaan yang menenangkan, dan keramahan hangat dari kami. Ini bukan sekadar penginapan, tapi pengalaman yang akan Anda kenang selamanya.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="jejamuran">\t\tRumah Makan Jejamuran di Yogyakarta adalah destinasi kuliner yang unik dengan spesialisasi pada hidangan berbahan dasar jamur. Dengan suasana yang nyaman dan alami, restoran ini menyajikan berbagai menu kreatif seperti sate jamur, tongseng jamur, dan aneka olahan jamur lainnya. Interiornya yang menggunakan elemen kayu dan tanaman menciptakan atmosfer sejuk dan menenangkan, menjadikan pengalaman bersantap semakin menyenangkan.
+        \n\n\t\tSelain menyajikan hidangan lezat, Jejamuran juga mengedukasi pengunjung tentang berbagai jenis jamur dan manfaat kesehatannya. Pengunjung dapat belajar tentang budidaya jamur dan khasiatnya, menjadikan restoran ini tidak hanya tempat makan, tetapi juga tempat belajar. Dengan layanan ramah dan suasana yang nyaman, Jejamuran adalah pilihan tepat untuk menikmati kuliner sehat dan berbeda di Yogyakarta.</string>
+    <string name="obelix">\t\tObelix Village adalah destinasi wisata yang menarik di Yogyakarta, menawarkan pengalaman unik dengan pemandangan alam yang indah dan berbagai aktivitas rekreasi. Terletak di kawasan yang tenang dan asri, tempat ini menyediakan suasana yang cocok untuk bersantai dan menikmati keindahan alam. Pengunjung dapat menikmati pemandangan yang menakjubkan dari bukit-bukit dan hamparan hijau yang luas, serta berfoto di berbagai spot yang instagrammable.
+        \n\n\t\tSelain pemandangan alam yang memukau, Obelix Village juga menawarkan berbagai fasilitas rekreasi dan edukasi. Ada area bermain anak, kebun binatang mini, dan taman bunga yang indah, menjadikannya tempat yang sempurna untuk keluarga dan anak-anak. Pengunjung juga dapat menikmati kuliner lokal di restoran yang ada, membuat kunjungan ke Obelix Village menjadi pengalaman yang lengkap dan menyenangkan.</string>
+    <string name="maps_jejamuran">geo:-7.7053761,110.3585889</string>
+    <string name="maps_obelix">geo:-7.6878247,110.3710331</string>
 </resources>

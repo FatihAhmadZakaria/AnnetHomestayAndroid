@@ -61,8 +61,30 @@
                 android:background="@drawable/et_rounded"
                 android:paddingStart="10dp"
                 tools:ignore="RtlSymmetry" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="fill_horizontal"
+                android:id="@+id/sudah_daftar"
+                android:layout_below="@+id/et_reg_password"
+                android:layout_marginBottom="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sudah_daftar"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="5dp"
+                    android:textSize="13sp"/>
+                <TextView
+                    android:id="@+id/to_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Masuk!"
+                    android:textColor="@color/main_red"
+                    android:textSize="13sp"/>
+            </LinearLayout>
             <Button
-                android:id="@+id/bt_login"
+                android:id="@+id/bt_register"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="@string/reg"
@@ -71,7 +93,7 @@
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:layout_below="@+id/et_reg_password"/>
+                android:layout_below="@+id/sudah_daftar"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -13,6 +13,21 @@
         android:theme="@style/Theme.AnnetHomestay"
         tools:targetApi="31">
         <activity
+            android:name=".ActivityDetailObjek"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityPilihO"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityPilihK"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityPilihP"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityPromo"
+            android:exported="false" />
+        <activity
             android:name=".ActivityAbout"
             android:exported="false" />
         <activity
@@ -25,10 +40,10 @@
             android:name=".ActivityOpsiLogin"
             android:exported="false" />
         <activity
-            android:name=".ActivitySlash"
+            android:name=".ActivityMain"
             android:exported="false" />
         <activity
-            android:name=".ActivityMain"
+            android:name=".ActivitySlash"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AnnetHomestay">

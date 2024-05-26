@@ -54,7 +54,8 @@
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/main_red"
         android:elevation="10dp"
-        app:cardCornerRadius="5dp">
+        app:cardCornerRadius="5dp"
+        android:layout_marginBottom="10dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -119,4 +120,10 @@
             </RelativeLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+    <ListView
+        android:id="@+id/list_promo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/menu_home"
+        tools:listitem="@layout/list_home"/>
 </RelativeLayout>

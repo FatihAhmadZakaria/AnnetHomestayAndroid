@@ -21,12 +21,12 @@ class ActivityMain : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        replaceFragment(FragmentHome())
+        replaceFragment(FragmentHome(), "home")
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.home -> replaceFragment(FragmentHome())
-                R.id.transaction -> replaceFragment(FragmentTransaction())
-                R.id.profile -> replaceFragment(FragmentHome())
+                R.id.home -> replaceFragment(FragmentHome(), "home")
+                R.id.transaction -> replaceFragment(FragmentTransaction(), "transaction")
+                R.id.profile -> replaceFragment(FragmentHome(), "profile")
 
                 else ->{
 
@@ -36,10 +36,11 @@ class ActivityMain : AppCompatActivity() {
         }
 
     }
-    private fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment, tag: String) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_view, fragment)
+        fragmentTransaction.addToBackStack(tag)
         fragmentTransaction.commit()
     }
 }

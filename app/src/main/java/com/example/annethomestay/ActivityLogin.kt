@@ -1,5 +1,6 @@
 package com.example.annethomestay
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
@@ -27,7 +28,12 @@ class ActivityLogin : AppCompatActivity() {
 
         binding.btLogin.setOnClickListener {
             it.startAnimation(anim)
-            Toast.makeText(this@ActivityLogin, "Button clicked", Toast.LENGTH_SHORT).show()
+            val i = Intent(this, ActivityMain::class.java)
+            startActivity(i)
+        }
+        binding.toRegister.setOnClickListener {
+            val i = Intent(this, ActivityRegister::class.java)
+            startActivity(i)
         }
     }
 }

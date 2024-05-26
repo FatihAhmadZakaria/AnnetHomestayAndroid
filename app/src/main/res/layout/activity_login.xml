@@ -49,16 +49,28 @@
                 android:background="@drawable/et_rounded"
                 android:paddingStart="10dp"
                 tools:ignore="RtlSymmetry" />
-            <TextView
-                android:id="@+id/belum_daftar"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/belum_daftar"
-                android:textColor="@color/black"
+                android:gravity="fill_horizontal"
+                android:id="@+id/belum_daftar"
                 android:layout_below="@+id/et_log_password"
-                android:layout_marginBottom="15dp"
-                android:layout_marginStart="5dp"
-                android:textSize="13sp"/>
+                android:layout_marginBottom="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/belum_daftar"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="5dp"
+                    android:textSize="13sp"/>
+                <TextView
+                    android:id="@+id/to_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Daftar!"
+                    android:textColor="@color/main_red"
+                    android:textSize="13sp"/>
+            </LinearLayout>
             <Button
                 android:id="@+id/bt_login"
                 android:layout_width="match_parent"
@@ -70,15 +82,6 @@
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:layout_below="@+id/belum_daftar"/>
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:gravity="center"-->
-<!--                android:orientation="horizontal">-->
-<!--&lt;!&ndash;                <ImageView&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_width=""&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_height=""&ndash;&gt;-->
-<!--            </LinearLayout>-->
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
