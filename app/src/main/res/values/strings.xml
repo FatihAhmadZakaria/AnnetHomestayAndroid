@@ -20,6 +20,9 @@
         \n\n\t\tSelain menyajikan hidangan lezat, Jejamuran juga mengedukasi pengunjung tentang berbagai jenis jamur dan manfaat kesehatannya. Pengunjung dapat belajar tentang budidaya jamur dan khasiatnya, menjadikan restoran ini tidak hanya tempat makan, tetapi juga tempat belajar. Dengan layanan ramah dan suasana yang nyaman, Jejamuran adalah pilihan tepat untuk menikmati kuliner sehat dan berbeda di Yogyakarta.</string>
     <string name="obelix">\t\tObelix Village adalah destinasi wisata yang menarik di Yogyakarta, menawarkan pengalaman unik dengan pemandangan alam yang indah dan berbagai aktivitas rekreasi. Terletak di kawasan yang tenang dan asri, tempat ini menyediakan suasana yang cocok untuk bersantai dan menikmati keindahan alam. Pengunjung dapat menikmati pemandangan yang menakjubkan dari bukit-bukit dan hamparan hijau yang luas, serta berfoto di berbagai spot yang instagrammable.
         \n\n\t\tSelain pemandangan alam yang memukau, Obelix Village juga menawarkan berbagai fasilitas rekreasi dan edukasi. Ada area bermain anak, kebun binatang mini, dan taman bunga yang indah, menjadikannya tempat yang sempurna untuk keluarga dan anak-anak. Pengunjung juga dapat menikmati kuliner lokal di restoran yang ada, membuat kunjungan ke Obelix Village menjadi pengalaman yang lengkap dan menyenangkan.</string>
-    <string name="maps_jejamuran">geo:-7.7053761,110.3585889</string>
-    <string name="maps_obelix">geo:-7.6878247,110.3710331</string>
+    <string name="maps_jejamuran">https://www.google.com/maps/place/Jejamuran/@-7.7053814,110.3585889,17z/data=!3m1!4b1!4m6!3m5!1s0x2e7a5f4b00000001:0xb991824588eb34e1!8m2!3d-7.7053814!4d110.3611638!16s%2Fg%2F1pzq550f5?entry=ttu</string>
+    <string name="maps_obelix">https://www.google.com/maps/place/Obelix+Village/@-7.6829053,110.366628,15z/data=!4m6!3m5!1s0x2e7a5f6a30f765dd:0x42930b153c711354!8m2!3d-7.68783!4d110.373608!16s%2Fg%2F11spg0pfqg?entry=ttu</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="profile">Profile</string>
 </resources>

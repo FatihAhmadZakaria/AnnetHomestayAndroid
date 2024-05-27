@@ -38,6 +38,8 @@ class ActivityDetailObjek : AppCompatActivity() {
                 startActivity(i)
             }
         }
-        binding
+        binding.icBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 }

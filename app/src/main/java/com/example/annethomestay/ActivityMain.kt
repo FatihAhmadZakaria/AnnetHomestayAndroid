@@ -26,7 +26,7 @@ class ActivityMain : AppCompatActivity() {
             when(it.itemId){
                 R.id.home -> replaceFragment(FragmentHome(), "home")
                 R.id.transaction -> replaceFragment(FragmentTransaction(), "transaction")
-                R.id.profile -> replaceFragment(FragmentHome(), "profile")
+                R.id.profile -> replaceFragment(FragmentProfile(), "profile")
 
                 else ->{
 
