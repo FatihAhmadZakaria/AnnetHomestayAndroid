@@ -21,16 +21,25 @@ class ActivityMain : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        replaceFragment(FragmentHome(), "home")
+        val openFragment = intent.getStringExtra("open_fragment")
+        if (openFragment != null) {
+            when (openFragment) {
+                "home" -> replaceFragment(FragmentHome(), "home")
+                "transaction" -> replaceFragment(FragmentTransaction(), "transaction")
+                "profile" -> replaceFragment(FragmentProfile(), "profile")
+                else -> replaceFragment(FragmentHome(), "home")
+            }
+        } else {
+            // Load default fragment
+            replaceFragment(FragmentHome(), "home")
+        }
+
         binding.bottomNav.setOnItemSelectedListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.home -> replaceFragment(FragmentHome(), "home")
                 R.id.transaction -> replaceFragment(FragmentTransaction(), "transaction")
                 R.id.profile -> replaceFragment(FragmentProfile(), "profile")
-
-                else ->{
-
-                }
+                else -> {}
             }
             true
         }

@@ -44,6 +44,10 @@ class FragmentHome : Fragment() {
             i.putExtra("deskrip", deskrip)
             startActivity(i)
         }
+        binding.icHomestay.setOnClickListener {
+            val i = Intent(requireContext(), ActivityPilihP::class.java)
+            startActivity(i)
+        }
         binding.icObjectRec.setOnClickListener {
             val i = Intent(requireContext(), ActivityPilihO::class.java)
             startActivity(i)

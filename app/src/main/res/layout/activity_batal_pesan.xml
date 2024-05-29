@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityBatalPesan"
+    android:padding="10dp">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/status_img"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/batal_pesan"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:layout_marginTop="15dp"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/status_deskrip"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/status_img"
+        android:layout_marginTop="10dp">
+        <Spinner
+            android:id="@+id/spinner_batal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:spinnerMode="dropdown"/>
+    </androidx.cardview.widget.CardView>
+    <Button
+        android:id="@+id/pesan_batal"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:text="Konfirmasi"
+        android:layout_below="@+id/status_deskrip"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        android:background="@drawable/bt_rounded"
+        android:paddingHorizontal="10dp"/>
+    <Button
+        android:id="@+id/back_beranda"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bt_rounded"
+        android:layout_alignParentBottom="true"
+        android:text="Kembali ke beranda"
+        android:textAllCaps="false"
+        android:textColor="@color/white"/>
+
+</RelativeLayout>

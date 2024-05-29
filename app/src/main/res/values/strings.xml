@@ -11,6 +11,40 @@
     <string name="about_head">About us</string>
     <string name="about_promo">Promo</string>
     <string name="rek_obj">Rekomendasi Objek Sekitar</string>
+    <string name="profile">Profile</string>
+    <string name="status_pesan">Pesanan kamu sedang kami proses\nSilahkan tunggu pesan dari kami</string>
+    <string name="batal_pesan">Apakah kamu yakin ingin membatalkan pesanan yang telah dibuat?</string>
+    <string name="pil_penginapan">Pilihan Penginapan</string>
+    <string name="det_penginapan">Detail Penginapan</string>
+    <string name="payment_method_prompt">Pilih Pembayaran</string>
+    <string name="jumlah_hari_prompt">Pilih Jumlah Hari</string>
+    <string name="Jumlah_kamar_prompt">Pilih Kamar</string>
+    <string-array name="spinner_batal">
+        <item>Salah memesan</item>
+        <item>Ingin mengganti pesanan</item>
+        <item>Batal rencana untuk memesan</item>
+        <item>Tidak ingin mengisi</item>
+    </string-array>
+    <string-array name="img_glamping">
+        <item>glamping1</item>
+        <item>glamping2</item>
+        <item>glamping3</item>
+        <item>glamping4</item>
+        <item>glamping5</item>
+        <item>glamping6</item>
+    </string-array>
+    <string-array name="img_limasan">
+        <item>limasan1</item>
+        <item>limasan2</item>
+        <item>limasan3</item>
+        <item>limasan4</item>
+        <item>limasan5</item>
+    </string-array>
+    <string name="aturan_pengianpan">1. Pembayaran dan penyelesaian administrasi 100% dilakukan sebelum tamu check in
+        \n\n2. Tamu wajib menunjukkan identitas resmi (KTP/SIM dsb)
+        \n\n3. Jadwal check in 14.00 dan check out 12.00 (jika check in sebelum jam tersebut dan check out sesudah jam tersebut tambahan) dikenakan biaya
+        \n\n4. Homestay tidak bertanggung jawab atas kehilangan/ kerusakan barang penginap
+        \n\n5. Setiap tamu tidak diperbolehkan membawa binatang peliharaan, minuman keras, benda tajam, dan obat obatan terlarang</string>
     <string name="about_desc">\t\tSelamat datang di Annet Homestay, sebuah tempat di mana keindahan alam bertemu dengan ketenangan pedesaan. Terletak dengan sempurna di tengah-tengah keindahan alam Indonesia, homestay kami menawarkan pengalaman menginap yang tak terlupakan bagi setiap tamu.
         \n\n\t\tDengan pemandangan langsung yang memukau ke Gunung Merapi, tamu kami dapat menikmati keindahan alam yang menakjubkan sepanjang waktu. Udara segar dan sejuk dari pedesaan sekitar memberikan kesempatan bagi tamu untuk bernapas lega dan merasakan kedamaian yang langka di tengah kehidupan yang sibuk.
         \n\n\t\tAnnet Homestay bukan hanya sekadar tempat menginap, tapi juga tempat untuk terhubung kembali dengan alam dan budaya lokal. Dikelilingi oleh kebun yang hijau dan alam yang mempesona, tamu kami dapat menjelajahi lingkungan sekitar, berinteraksi dengan penduduk setempat, dan menikmati kegiatan-kegiatan alam yang menyegarkan.
@@ -22,7 +56,4 @@
         \n\n\t\tSelain pemandangan alam yang memukau, Obelix Village juga menawarkan berbagai fasilitas rekreasi dan edukasi. Ada area bermain anak, kebun binatang mini, dan taman bunga yang indah, menjadikannya tempat yang sempurna untuk keluarga dan anak-anak. Pengunjung juga dapat menikmati kuliner lokal di restoran yang ada, membuat kunjungan ke Obelix Village menjadi pengalaman yang lengkap dan menyenangkan.</string>
     <string name="maps_jejamuran">https://www.google.com/maps/place/Jejamuran/@-7.7053814,110.3585889,17z/data=!3m1!4b1!4m6!3m5!1s0x2e7a5f4b00000001:0xb991824588eb34e1!8m2!3d-7.7053814!4d110.3611638!16s%2Fg%2F1pzq550f5?entry=ttu</string>
     <string name="maps_obelix">https://www.google.com/maps/place/Obelix+Village/@-7.6829053,110.366628,15z/data=!4m6!3m5!1s0x2e7a5f6a30f765dd:0x42930b153c711354!8m2!3d-7.68783!4d110.373608!16s%2Fg%2F11spg0pfqg?entry=ttu</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="profile">Profile</string>
 </resources>
