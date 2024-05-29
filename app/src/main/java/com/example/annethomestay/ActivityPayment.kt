@@ -26,5 +26,10 @@ class ActivityPayment : AppCompatActivity() {
             i.putExtra("open_fragment", "home")
             startActivity(i)
         }
+
+        binding.pesanBatal.setOnClickListener {
+            val i =Intent(this, ActivityBatalPesan::class.java)
+            startActivity(i)
+        }
     }
 }

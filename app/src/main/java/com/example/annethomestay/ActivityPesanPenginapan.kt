@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.os.Handler
@@ -46,11 +47,22 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         binding.pengDeskrip.text = deskrip
         binding.pengKapasitas.text = kapasitas
         binding.pengHarga.text = harga.toString()
+        binding.icBack.setOnClickListener {
+            onBackPressed()
+        }
+        binding.pengTgl.setOnClickListener {
+            showDatePickerDialog()
+        }
 
         setupSpinners()
         setupPaymentSpinner()
         setupClipboard()
         initializeFlipperFromIntent()
+
+        binding.btPesanPeng.setOnClickListener {
+            val i = Intent(this, ActivityPayment::class.java)
+            startActivity(i)
+        }
     }
 
 

@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="10dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        app:cardCornerRadius="5dp">
+        app:cardCornerRadius="5dp"
+        android:layout_margin="10dp">
         <ImageView
             android:id="@+id/img_list_home"
             android:layout_width="match_parent"

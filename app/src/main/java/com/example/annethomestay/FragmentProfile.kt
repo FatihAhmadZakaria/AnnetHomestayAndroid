@@ -41,7 +41,6 @@ class FragmentProfile : Fragment() {
         }
     }
 
-    @SuppressLint("InflateParams", "MissingInflatedId")
     private fun showChangePhoneDialog() {
         val dialogView = layoutInflater.inflate(R.layout.popup_phone, null)
         val currentPhone = dialogView.findViewById<EditText>(R.id.et_ph_old)
@@ -50,16 +49,35 @@ class FragmentProfile : Fragment() {
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setTitle("Ganti Nomor")
             .setView(dialogView)
-            .setPositiveButton("Ganti") { dialog, _ ->
-                val currentPhone = currentPhone.text.toString()
-                val newPhone = newPhone.text.toString()
-                changePhone(currentPhone, newPhone)
+            .setPositiveButton("Ganti", null) // Biarkan null untuk menangani klik sendiri
+            .setNegativeButton("Batal", null)
+
+        val dialog = dialogBuilder.create() // Buat dialog dari dialogBuilder
+
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_red))
+            negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_red))
+
+            positiveButton.setOnClickListener {
+                val currentPh = currentPhone.text.toString()
+                val newPh = newPhone.text.toString()
+
+                // Panggil fungsi untuk mengganti nomor telepon di sini
+                changePhone(currentPh, newPh)
                 dialog.dismiss()
             }
-            .setNegativeButton("Batal") { dialog, _ ->
+
+            negativeButton.setOnClickListener {
                 dialog.dismiss()
             }
+        }
+
+        dialog.show() // Pastikan untuk memanggil show() agar dialog muncul
     }
+
 
     private fun showChangePasswordDialog() {
         val dialogView = layoutInflater.inflate(R.layout.popup_security, null)

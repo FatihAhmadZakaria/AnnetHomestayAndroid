@@ -40,6 +40,11 @@
         <item>limasan4</item>
         <item>limasan5</item>
     </string-array>
+    <string name="aturan_kendaraan">1. Pembayaran dilakukan secara digital atau ditempat
+        \n\n2. Setelah pemesanan kendaraan dilakukan, pengelola akan mengantarkan kendaraan sesuai dengan pengisian form pemesanan
+        \n\n3. Kendaraan akan ditarik ketika tamu melakukan check-out atau jika durasi sewa telah tercapai
+        \n\n4. Penyewaan melebihi batas durasi akan dikenakan biaya tambahan 2X harga perjam
+        \n\n5. Kerusakan kendaraan ditanggung penyewa</string>
     <string name="aturan_pengianpan">1. Pembayaran dan penyelesaian administrasi 100% dilakukan sebelum tamu check in
         \n\n2. Tamu wajib menunjukkan identitas resmi (KTP/SIM dsb)
         \n\n3. Jadwal check in 14.00 dan check out 12.00 (jika check in sebelum jam tersebut dan check out sesudah jam tersebut tambahan) dikenakan biaya
@@ -56,4 +61,5 @@
         \n\n\t\tSelain pemandangan alam yang memukau, Obelix Village juga menawarkan berbagai fasilitas rekreasi dan edukasi. Ada area bermain anak, kebun binatang mini, dan taman bunga yang indah, menjadikannya tempat yang sempurna untuk keluarga dan anak-anak. Pengunjung juga dapat menikmati kuliner lokal di restoran yang ada, membuat kunjungan ke Obelix Village menjadi pengalaman yang lengkap dan menyenangkan.</string>
     <string name="maps_jejamuran">https://www.google.com/maps/place/Jejamuran/@-7.7053814,110.3585889,17z/data=!3m1!4b1!4m6!3m5!1s0x2e7a5f4b00000001:0xb991824588eb34e1!8m2!3d-7.7053814!4d110.3611638!16s%2Fg%2F1pzq550f5?entry=ttu</string>
     <string name="maps_obelix">https://www.google.com/maps/place/Obelix+Village/@-7.6829053,110.366628,15z/data=!4m6!3m5!1s0x2e7a5f6a30f765dd:0x42930b153c711354!8m2!3d-7.68783!4d110.373608!16s%2Fg%2F11spg0pfqg?entry=ttu</string>
+    <string name="pil_ken">Pilihan Kendaraan</string>
 </resources>

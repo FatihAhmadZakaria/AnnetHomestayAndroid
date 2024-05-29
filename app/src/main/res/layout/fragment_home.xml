@@ -66,15 +66,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
                 <androidx.cardview.widget.CardView
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     app:cardElevation="10dp"
                     android:backgroundTint="@color/white"
                     android:layout_centerInParent="true">
                     <ImageView
                         android:id="@+id/ic_homestay"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_weight="1"
                         android:src="@drawable/ic_rent"
                         android:layout_gravity="center"/>
@@ -85,15 +85,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
                 <androidx.cardview.widget.CardView
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     app:cardElevation="10dp"
                     android:backgroundTint="@color/white"
                     android:layout_centerInParent="true">
                     <ImageView
                         android:id="@+id/ic_object_rec"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_weight="1"
                         android:src="@drawable/ic_object_rec"
                         android:layout_gravity="center"/>
@@ -104,15 +104,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
                 <androidx.cardview.widget.CardView
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     app:cardElevation="10dp"
                     android:backgroundTint="@color/white"
                     android:layout_centerInParent="true">
                     <ImageView
                         android:id="@+id/ic_motocycle"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_weight="1"
                         android:src="@drawable/ic_motocycle"
                         android:layout_gravity="center"/>

@@ -9,7 +9,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.annethomestay.databinding.ActivityPilihOBinding
 
-class ActivityPilihO : AppCompatActivity() {private lateinit var binding: ActivityPilihOBinding
+class ActivityPilihO : AppCompatActivity() {
+    private lateinit var binding: ActivityPilihOBinding
     private lateinit var objekArrayList: ArrayList<DataListRekomendasi>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +26,6 @@ class ActivityPilihO : AppCompatActivity() {private lateinit var binding: Activi
         val nameObj = arrayOf("JeJamuran", "Obelix Village")
         val deskrip = arrayOf(getString(R.string.jejamuran), getString(R.string.obelix))
         val linkObj = arrayOf(getString(R.string.maps_jejamuran), getString(R.string.maps_obelix))
-
 
         objekArrayList = ArrayList()
 

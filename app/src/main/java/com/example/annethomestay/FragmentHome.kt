@@ -52,5 +52,9 @@ class FragmentHome : Fragment() {
             val i = Intent(requireContext(), ActivityPilihO::class.java)
             startActivity(i)
         }
+        binding.icMotocycle.setOnClickListener {
+            val i = Intent(requireContext(), ActivityPilihK::class.java)
+            startActivity(i)
+        }
     }
 }
