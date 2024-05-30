@@ -20,6 +20,9 @@
         android:theme="@style/Theme.AnnetHomestay"
         tools:targetApi="31">
         <activity
+            android:name=".ActivityDetailTransaction"
+            android:exported="false" />
+        <activity
             android:name=".ActivityPesanKendaraan"
             android:exported="false" />
         <activity

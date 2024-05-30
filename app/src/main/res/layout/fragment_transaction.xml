@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".FragmentTransaction">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hello_blank_fragment"
-        android:layout_centerInParent="true"/>
+    <ListView
+        android:id="@+id/list_transaksi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        tools:listitem="@layout/list_transaksi"/>
 
 </RelativeLayout>
