@@ -1,5 +1,6 @@
 package com.example.annethomestay
 
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +8,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.annethomestay.R
-import com.example.annethomestay.Kendaraan
-import com.example.annethomestay.Penginapan
 
 
 class DataListTransactionAdapter(context: Context, private val transaksiList: ArrayList<Any>) :
@@ -43,14 +42,12 @@ class DataListTransactionAdapter(context: Context, private val transaksiList: Ar
             val penginapan = transaksi as Penginapan
             view!!.findViewById<TextView>(R.id.id_trans_peng).text = penginapan.idTransaksi
             view.findViewById<TextView>(R.id.jenis_trans_peng).text = penginapan.jenisTransaksi
-            view.findViewById<TextView>(R.id.stat_trans_peng).text = penginapan.statusTransaksi
             view.findViewById<TextView>(R.id.total_trans_peng).text = penginapan.totalTransaksi.toString()
             view.findViewById<TextView>(R.id.tgl_trans_peng).text = penginapan.tanggalSewa
         } else {
             val kendaraan = transaksi as Kendaraan
             view!!.findViewById<TextView>(R.id.id_trans).text = kendaraan.idTransaksi
             view.findViewById<TextView>(R.id.jenis_trans).text = kendaraan.jenisTransaksi
-            view.findViewById<TextView>(R.id.stat_trans).text = kendaraan.statusTransaksi
             view.findViewById<TextView>(R.id.total_trans).text = kendaraan.totalTransaksi.toString()
             view.findViewById<TextView>(R.id.tgl_trans).text = kendaraan.tanggalSewa
         }

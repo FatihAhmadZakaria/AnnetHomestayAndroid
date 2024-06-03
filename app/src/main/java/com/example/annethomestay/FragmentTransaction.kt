@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.annethomestay.databinding.FragmentTransactionBinding
+import java.io.Serializable
 
 class FragmentTransaction : Fragment() {
     private lateinit var binding: FragmentTransactionBinding
@@ -26,8 +27,8 @@ class FragmentTransaction : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         transaksiList = ArrayList()
         // Tambahkan data ke transaksiList (data dari dua tabel)
-        transaksiList.add(Penginapan("1", "Hotel XYZ", "Penginapan", "Berhasil", 3, "2024-05-01", "Dibayar", 300000))
-        transaksiList.add(Kendaraan("2", "Mobil ABC", "Kendaraan", "Berhasil", 2, "2024-05-02", "Dibayar", 500000))
+        transaksiList.add(Penginapan("1", "Hotel XYZ", "Penginapan",  3, "2024-05-01", "Dibayar", 300000))
+        transaksiList.add(Kendaraan("2", "Mobil ABC", "Kendaraan",  2, "2024-05-02", "Dibayar", 500000))
 
         adapter = DataListTransactionAdapter(requireContext(), transaksiList)
         binding.listTransaksi.adapter = adapter
@@ -45,10 +46,10 @@ class FragmentTransaction : Fragment() {
             val intent = Intent(requireContext(), ActivityDetailTransaction::class.java)
             if (transaksi is Penginapan) {
                 intent.putExtra("jenis_transaksi", "penginapan")
-                intent.putExtra("transaksi", transaksi)
+                intent.putExtra("transaksi", transaksi as Serializable)
             } else if (transaksi is Kendaraan) {
                 intent.putExtra("jenis_transaksi", "kendaraan")
-                intent.putExtra("transaksi", transaksi)
+                intent.putExtra("transaksi", transaksi as Serializable)
             }
             startActivity(intent)
         }

@@ -50,8 +50,11 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         binding.icBack.setOnClickListener {
             onBackPressed()
         }
-        binding.pengTgl.setOnClickListener {
-            showDatePickerDialog()
+        binding.pengTglIn.setOnClickListener {
+            showDatePickerDialogIn()
+        }
+        binding.pengTglOut.setOnClickListener {
+            showDatePickerDialogOut()
         }
 
         setupSpinners()
@@ -114,7 +117,6 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         numberOfBookingsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         binding.pengJml.adapter = numberOfBookingsAdapter
-        binding.pengDurasi.adapter = numberOfBookingsAdapter
 
         binding.pengJml.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -127,16 +129,6 @@ class ActivityPesanPenginapan : AppCompatActivity() {
             }
         }
 
-        binding.pengDurasi.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = numberOfBookingsOptions[position]
-                showToast("Durasi Hari: $selectedItem")
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
-            }
-        }
     }
 
     private fun setupPaymentSpinner() {
@@ -173,7 +165,7 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showDatePickerDialog() {
+    private fun showDatePickerDialogIn() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -181,7 +173,20 @@ class ActivityPesanPenginapan : AppCompatActivity() {
 
         val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
             val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-            binding.pengTgl.setText(selectedDate)
+            binding.pengTglIn.setText(selectedDate)
+        }, year, month, day)
+
+        datePickerDialog.show()
+    }
+    private fun showDatePickerDialogOut() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
+            val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+            binding.pengTglOut.setText(selectedDate)
         }, year, month, day)
 
         datePickerDialog.show()

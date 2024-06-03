@@ -25,13 +25,13 @@
         <item>Batal rencana untuk memesan</item>
         <item>Tidak ingin mengisi</item>
     </string-array>
-    <string-array name="img_glamping">
-        <item>glamping1</item>
-        <item>glamping2</item>
-        <item>glamping3</item>
-        <item>glamping4</item>
-        <item>glamping5</item>
-        <item>glamping6</item>
+    <string-array name="img_gladag">
+        <item>gladag1</item>
+        <item>gladag2</item>
+        <item>gladag3</item>
+        <item>gladag4</item>
+        <item>gladag5</item>
+        <item>gladag6</item>
     </string-array>
     <string-array name="img_limasan">
         <item>limasan1</item>

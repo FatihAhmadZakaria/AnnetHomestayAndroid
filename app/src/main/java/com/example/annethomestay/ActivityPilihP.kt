@@ -22,10 +22,10 @@ class ActivityPilihP : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val img = arrayOf(R.drawable.glamping1, R.drawable.limasan1)
-        val imgSpin = arrayOf("img_glamping", "img_limasan")
-        val name = arrayOf("Glamping", "Limasan")
-        val deskrip = arrayOf("Paket Glamping", "Paket Limasan")
+        val img = arrayOf(R.drawable.gladag1, R.drawable.limasan1)
+        val imgSpin = arrayOf("img_gladag", "img_limasan")
+        val name = arrayOf("Gladag", "Limasan")
+        val deskrip = arrayOf("Paket Gladag", "Paket Limasan")
         val kapasitas = arrayOf("2-4", "2-5")
         val harga = arrayOf(500000, 750000)
 

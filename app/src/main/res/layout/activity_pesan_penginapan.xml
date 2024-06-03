@@ -85,10 +85,11 @@
                 android:layout_below="@+id/peng_atas"
                 app:cardCornerRadius="5dp"
                 android:layout_margin="10dp">
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:orientation="vertical">
                     <TextView
                         android:id="@+id/peng_pesan"
                         android:layout_width="wrap_content"
@@ -103,19 +104,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_below="@id/peng_pesan">
+                        android:layout_marginBottom="5dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Kapasitas "
                             android:textColor="@color/black"
-                            android:layout_marginBottom="5dp"
                             android:textSize="15sp"/>
                         <TextView
                             android:id="@+id/peng_kapasitas"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/peng_pesan"
                             android:text="2 - 5"
                             android:textSize="15sp"
                             android:textColor="@color/black"/>
@@ -124,7 +123,6 @@
                             android:layout_height="wrap_content"
                             android:text=" orang"
                             android:textColor="@color/black"
-                            android:layout_marginBottom="5dp"
                             android:textSize="15sp"/>
                     </LinearLayout>
                     <TextView
@@ -133,22 +131,34 @@
                         android:layout_height="wrap_content"
                         android:text="Harga Permalam"
                         android:textColor="@color/black"
-                        android:layout_below="@id/line_kap"
                         android:textSize="15sp"
                         android:layout_marginBottom="25dp"/>
                     <EditText
-                        android:id="@+id/peng_tgl"
+                        android:id="@+id/peng_tgl_in"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Pilih tanggal"
+                        android:hint="Pilih tanggal check-in"
                         android:textSize="15sp"
                         android:focusable="false"
                         android:clickable="true"
-                        android:layout_below="@id/peng_harga"
                         android:background="@drawable/et_rounded"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="5dp"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:layout_marginBottom="5dp"/>
+                    <EditText
+                        android:id="@+id/peng_tgl_out"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Pilih tanggal check-out"
+                        android:textSize="15sp"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:background="@drawable/et_rounded"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="5dp"
+                        android:gravity="center"
+                        android:layout_marginBottom="5dp"/>
                     <TextView
                         android:id="@+id/bt_cek_peng"
                         android:layout_width="wrap_content"
@@ -158,37 +168,34 @@
                         android:textSize="15sp"
                         android:background="@drawable/bt_rounded"
                         android:text="Cek"
-                        android:textColor="@color/white"
-                        android:layout_toEndOf="@+id/peng_tgl"
-                        android:layout_below="@id/peng_harga"
-                        android:layout_marginStart="5dp"/>
-                    <TextView
-                        android:id="@+id/peng_stat"
+                        android:textColor="@color/white"/>
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tersisa"
-                        android:textSize="15sp"
-                        android:textColor="@color/black"
-                        android:layout_below="@+id/peng_tgl"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="5dp"/>
-                    <TextView
-                        android:id="@+id/peng_stok"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="15sp"
-                        android:textColor="@color/main_red"
-                        android:layout_toEndOf="@+id/peng_stat"
-                        android:layout_below="@+id/peng_tgl"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="5dp"/>
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/peng_stat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tersisa"
+                            android:textSize="15sp"
+                            android:textColor="@color/black"
+                            android:layout_marginTop="5dp"/>
+                        <TextView
+                            android:id="@+id/peng_stok"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="15sp"
+                            android:textColor="@color/main_red"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginStart="5dp"/>
+                    </LinearLayout>
                     <LinearLayout
                         android:id="@+id/jml_pesan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_below="@id/peng_stok"
                         android:layout_marginTop="25dp">
                         <TextView
                             android:id="@+id/jml"
@@ -204,35 +211,24 @@
                             android:prompt="@string/Jumlah_kamar_prompt"
                             android:layout_marginBottom="5dp"/>
                     </LinearLayout>
+
                     <LinearLayout
-                        android:id="@+id/durasi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_below="@id/jml_pesan">
+                        android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
-                            android:text="Durasi hari"
+                            android:text="Metode Pembayaran"
                             android:textColor="@color/black"/>
                         <Spinner
-                            android:id="@+id/peng_durasi"
+                            android:id="@+id/peng_bayar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:prompt="@string/jumlah_hari_prompt"
+                            android:prompt="@string/payment_method_prompt"
                             android:layout_marginBottom="5dp"/>
                     </LinearLayout>
-
-                    <Spinner
-                        android:id="@+id/peng_bayar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:prompt="@string/payment_method_prompt"
-                        android:layout_below="@id/durasi"
-                        android:layout_marginTop="25dp"
-                        android:layout_marginBottom="5dp"/>
-
 
                     <LinearLayout
                         android:id="@+id/det_bank"
@@ -240,8 +236,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:visibility="visible"
-                        android:paddingVertical="5dp"
-                        android:layout_below="@+id/peng_bayar">
+                        android:paddingVertical="5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -255,7 +250,7 @@
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_copy"
                             android:id="@+id/copyIcon"
-                            android:layout_marginLeft="5dp"/>
+                            android:layout_marginEnd="5dp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -263,7 +258,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_below="@id/det_bank">
+                        android:layout_marginTop="25dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -286,12 +281,11 @@
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="5dp"
                         android:text="Pesan"
-                        android:layout_below="@id/total"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/white"
                         android:background="@drawable/bt_rounded"/>
 
-                </RelativeLayout>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
