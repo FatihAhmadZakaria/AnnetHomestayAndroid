@@ -22,12 +22,17 @@ class ActivityDetailObjek : AppCompatActivity() {
             insets
         }
 
-        val img = intent.getIntExtra("img", 0)
-        val name = intent.getStringExtra("name")
+        val img = intent.getStringExtra("img")
+        val name = intent.getStringExtra("nama")
         val deskrip = intent.getStringExtra("deskrip")
         val link = intent.getStringExtra("link")
 
-        binding.imgObj.setImageResource(img)
+        val drawableId = resources.getIdentifier(img, "drawable", packageName)
+        if (drawableId != 0) {
+            binding.imgObj.setImageResource(drawableId)
+        } else {
+            binding.imgObj.setImageDrawable(null) // atau set gambar default jika tidak ditemukan
+        }
         binding.nameObj.text = name
         binding.deskripObj.text = deskrip
         binding.btObj.setOnClickListener {

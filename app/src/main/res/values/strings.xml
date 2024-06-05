@@ -25,7 +25,7 @@
         <item>Batal rencana untuk memesan</item>
         <item>Tidak ingin mengisi</item>
     </string-array>
-    <string-array name="img_gladag">
+    <string-array name="gladag1">
         <item>gladag1</item>
         <item>gladag2</item>
         <item>gladag3</item>
@@ -33,7 +33,7 @@
         <item>gladag5</item>
         <item>gladag6</item>
     </string-array>
-    <string-array name="img_limasan">
+    <string-array name="glamping1">
         <item>limasan1</item>
         <item>limasan2</item>
         <item>limasan3</item>
@@ -62,4 +62,5 @@
     <string name="maps_jejamuran">https://www.google.com/maps/place/Jejamuran/@-7.7053814,110.3585889,17z/data=!3m1!4b1!4m6!3m5!1s0x2e7a5f4b00000001:0xb991824588eb34e1!8m2!3d-7.7053814!4d110.3611638!16s%2Fg%2F1pzq550f5?entry=ttu</string>
     <string name="maps_obelix">https://www.google.com/maps/place/Obelix+Village/@-7.6829053,110.366628,15z/data=!4m6!3m5!1s0x2e7a5f6a30f765dd:0x42930b153c711354!8m2!3d-7.68783!4d110.373608!16s%2Fg%2F11spg0pfqg?entry=ttu</string>
     <string name="pil_ken">Pilihan Kendaraan</string>
+    <string name="pembayaran">Selesaikan pembayaran, pembayaran diproses maksimal 1X24 Jam.\n\nJika status pembayaran belum dibayar hingga batas waktu, dimohon untuk menghubungi Admin via WA atau Instagram</string>
 </resources>

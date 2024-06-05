@@ -2,12 +2,16 @@ package com.example.annethomestay
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.annethomestay.databinding.ActivityPilihOBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ActivityPilihO : AppCompatActivity() {
     private lateinit var binding: ActivityPilihOBinding
@@ -22,35 +26,51 @@ class ActivityPilihO : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val imgObj = arrayOf(R.drawable.jejamuran, R.drawable.obelix)
-        val nameObj = arrayOf("JeJamuran", "Obelix Village")
-        val deskrip = arrayOf(getString(R.string.jejamuran), getString(R.string.obelix))
-        val linkObj = arrayOf(getString(R.string.maps_jejamuran), getString(R.string.maps_obelix))
 
-        objekArrayList = ArrayList()
+        val apiService = ApiClient.apiService
+        val call = apiService.getRekomendasi()
+        call.enqueue(object : Callback<List<DataListRekomendasi>> {
+            override fun onResponse(
+                call: Call<List<DataListRekomendasi>>,
+                response: Response<List<DataListRekomendasi>>
+            ) {
+                if (response.isSuccessful) {
+                    val dataListRekomendasi = response.body() ?: emptyList()
+                    objekArrayList = ArrayList()
 
-        for ( i in imgObj.indices){
-            val objek = DataListRekomendasi(imgObj[i], nameObj[i], deskrip[i].toString(),
-                linkObj[i].toString()
-            )
-            objekArrayList.add(objek)
-        }
+                    for (objek in dataListRekomendasi) {
+                        val dataListRekomendasi = DataListRekomendasi(
+                            imgObj = objek.imgObj,
+                            nameObj = objek.nameObj,
+                            deskrip = objek.deskrip,
+                            linkObj = objek.linkObj
+                        )
+                        objekArrayList.add(dataListRekomendasi)
+                    }
 
-        binding.listRekObj.isClickable = true
-        binding.listRekObj.adapter = DataListRekomendasiAdapter(this,objekArrayList)
-        binding.listRekObj.setOnItemClickListener { parent, view, position, id ->
-            val imgObj = imgObj[position]
-            val nameObj = nameObj[position]
-            val deskrip = deskrip[position]
-            val linkObj = linkObj[position]
+                    binding.listRekObj.isClickable = true
+                    val adapter = DataListRekomendasiAdapter(this@ActivityPilihO, objekArrayList)
+                    binding.listRekObj.adapter = adapter
+                    binding.listRekObj.setOnItemClickListener { parent, view, position, id ->
+                        val data = objekArrayList[position]
 
-            val i = Intent(this, ActivityDetailObjek::class.java)
-            i.putExtra("img", imgObj)
-            i.putExtra("name", nameObj)
-            i.putExtra("deskrip", deskrip)
-            i.putExtra("link", linkObj)
-            startActivity(i)
-        }
+                        val i = Intent(this@ActivityPilihO, ActivityDetailObjek::class.java)
+                        i.putExtra("img", data.imgObj)
+                        i.putExtra("nama", data.nameObj)
+                        i.putExtra("deskrip", data.deskrip)
+                        i.putExtra("link", data.linkObj)
+                        startActivity(i)
+                    }
+                } else {
+                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<DataListRekomendasi>>, t: Throwable) {
+                Log.d("gagal", "Panggilan API gagal: ${t.message}")
+            }
+        })
+
         binding.icBackObjek.setOnClickListener {
             onBackPressed()
         }

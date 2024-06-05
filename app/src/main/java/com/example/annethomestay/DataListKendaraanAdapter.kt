@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 class DataListKendaraanAdapter (private val context: Context, private val arrayList: ArrayList<DataListKendaraan>) :
     ArrayAdapter<DataListKendaraan>(context, R.layout.list_kendaraan, arrayList) {
@@ -28,7 +29,8 @@ class DataListKendaraanAdapter (private val context: Context, private val arrayL
         }
 
         val item = arrayList[position]
-        viewHolder.imageView.setImageResource(item.img)
+        val drawableId = context.resources.getIdentifier(item.img, "drawable", context.packageName)
+        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, drawableId))
         viewHolder.textNama.text = item.nama
         viewHolder.textHarga.text = item.harga
         viewHolder.textStat.text = item.status

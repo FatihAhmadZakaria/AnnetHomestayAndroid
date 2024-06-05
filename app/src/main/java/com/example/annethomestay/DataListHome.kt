@@ -1,4 +1,5 @@
 package com.example.annethomestay
 
-data class DataListHome(val imgId : Int,
+data class DataListHome(val img : String,
+                        val nama : String,
                         val deskrip : String)

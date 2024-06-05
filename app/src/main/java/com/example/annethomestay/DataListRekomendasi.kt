@@ -1,7 +1,7 @@
 package com.example.annethomestay
 
 data class DataListRekomendasi(
-    val imgObj : Int,
+    val imgObj : String,
     val nameObj : String,
     val deskrip : String,
     val linkObj : String

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 
 class DataListHomeAdapter(private val context: Context, private val arrayList: ArrayList<DataListHome>) :
     ArrayAdapter<DataListHome>(context, R.layout.list_home, arrayList) {
@@ -25,7 +26,8 @@ class DataListHomeAdapter(private val context: Context, private val arrayList: A
         }
 
         val item = arrayList[position]
-        viewHolder.imageView.setImageResource(item.imgId)
+        val drawableId = context.resources.getIdentifier(item.img, "drawable", context.packageName)
+        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, drawableId))
 
         return view!!
     }

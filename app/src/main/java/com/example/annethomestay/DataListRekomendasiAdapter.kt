@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 class DataListRekomendasiAdapter(private val context: Context, private val arrayList: ArrayList<DataListRekomendasi>) :
     ArrayAdapter<DataListRekomendasi>(context, R.layout.list_rek_obj, arrayList) {
@@ -26,7 +27,8 @@ class DataListRekomendasiAdapter(private val context: Context, private val array
         }
 
         val item = arrayList[position]
-        viewHolder.imageView.setImageResource(item.imgObj)
+        val drawableId = context.resources.getIdentifier(item.imgObj, "drawable", context.packageName)
+        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, drawableId))
         viewHolder.textView.text = item.nameObj
 
         return view!!

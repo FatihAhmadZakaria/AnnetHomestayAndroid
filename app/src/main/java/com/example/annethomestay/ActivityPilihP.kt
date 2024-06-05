@@ -1,13 +1,17 @@
 package com.example.annethomestay
 
+import DataListPenginapanAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.annethomestay.databinding.ActivityPilihPBinding
+import okhttp3.Response
+import retrofit2.Call
+import retrofit2.Callback
 
 class ActivityPilihP : AppCompatActivity() {
     private lateinit var binding: ActivityPilihPBinding
@@ -22,42 +26,59 @@ class ActivityPilihP : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val img = arrayOf(R.drawable.gladag1, R.drawable.limasan1)
-        val imgSpin = arrayOf("img_gladag", "img_limasan")
-        val name = arrayOf("Gladag", "Limasan")
-        val deskrip = arrayOf("Paket Gladag", "Paket Limasan")
-        val kapasitas = arrayOf("2-4", "2-5")
-        val harga = arrayOf(500000, 750000)
 
-        penginapanArrayList = ArrayList()
-
-        for ( i in img.indices){
-            val penginapan = DataListPenginapan(img[i], imgSpin[i], name[i],
-                deskrip[i], kapasitas[i], harga[i])
-            penginapanArrayList.add(penginapan)
-        }
-
-        binding.listPenginapan.isClickable = true
-        binding.listPenginapan.adapter = DataListPenginapanAdapter(this, penginapanArrayList)
-        binding.listPenginapan.setOnItemClickListener { parent, view, position, id ->
-            val img = img[position]
-            val imgSpin = imgSpin[position]
-            val name = name[position]
-            val deskrip = deskrip[position]
-            val kapasitas = kapasitas[position]
-            val harga = harga[position]
-
-            val i = Intent(this, ActivityPesanPenginapan::class.java)
-            i.putExtra("img",img)
-            i.putExtra("imgSpin",imgSpin)
-            i.putExtra("name",name)
-            i.putExtra("deskrip",deskrip)
-            i.putExtra("kapasitas",kapasitas)
-            i.putExtra("harga",harga)
-            startActivity(i)
-        }
         binding.icBack.setOnClickListener {
             onBackPressed()
         }
+
+        val apiService = ApiClient.apiService
+        val call = apiService.getPenginapan()
+        call.enqueue(object : Callback<List<DataListPenginapan>> {
+            override fun onResponse(
+                call: Call<List<DataListPenginapan>>,
+                response: retrofit2.Response<List<DataListPenginapan>>
+            ) {
+                if (response.isSuccessful) {
+                    val dataListPenginapan = response.body() ?: emptyList()
+                    penginapanArrayList = ArrayList()
+
+                    for (penginapan in dataListPenginapan) {
+                        val dataListPenginapan = DataListPenginapan(
+                            img = penginapan.img,
+                            imgFlip = penginapan.imgFlip, 
+                            name = penginapan.name, 
+                            deskrip = penginapan.deskrip, 
+                            kapasitas = penginapan.kapasitas, 
+                            harga = penginapan.harga, 
+                        )
+                        penginapanArrayList.add(dataListPenginapan)
+                    }
+
+                    // Set adapter untuk ListView
+                    binding.listPenginapan.isClickable = true
+                    val adapter = DataListPenginapanAdapter(this@ActivityPilihP, penginapanArrayList)
+                    binding.listPenginapan.adapter = adapter
+                    binding.listPenginapan.setOnItemClickListener { parent, view, position, id ->
+                        val data = penginapanArrayList[position]
+
+                        val i = Intent(this@ActivityPilihP, ActivityPesanPenginapan::class.java)
+                        i.putExtra("img", data.img)
+                        i.putExtra("imgSpin", data.imgFlip)
+                        i.putExtra("name", data.name)
+                        i.putExtra("deskrip", data.deskrip)
+                        i.putExtra("kapasitas", data.kapasitas)
+                        i.putExtra("harga", data.harga)
+                        startActivity(i)
+                    }
+                } else {
+                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<DataListPenginapan>>, t: Throwable) {
+                Log.d("gagal", "Panggilan API gagal: ${t.message}")
+            }
+
+        })
     }
 }

@@ -22,12 +22,19 @@ class ActivityPromo : AppCompatActivity() {
             insets
         }
         // Menerima data yang dikirim dari intent
-        val imageId = intent.getIntExtra("img", 0) // 0 adalah nilai default jika tidak ada data yang dikirim
+        val img = intent.getStringExtra("img")
+        val nama = intent.getStringExtra("nama")
         val description = intent.getStringExtra("deskrip")
 
-        // Menetapkan data ke ImageView dan TextView
-        binding.imgPromo.setImageResource(imageId)
+        val drawableId = resources.getIdentifier(img, "drawable", packageName)
+        if (drawableId != 0) {
+            binding.imgPromo.setImageResource(drawableId)
+        } else {
+            binding.imgPromo.setImageDrawable(null) // atau set gambar default jika tidak ditemukan
+        }
+        binding.namaPromo.text = nama
         binding.deskripPromo.text = description
+
         binding.icBackAbout.setOnClickListener {
             onBackPressed()
         }

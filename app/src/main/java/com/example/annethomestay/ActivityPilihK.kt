@@ -2,12 +2,16 @@ package com.example.annethomestay
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.annethomestay.databinding.ActivityPilihKBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ActivityPilihK : AppCompatActivity() {
     private lateinit var binding: ActivityPilihKBinding
@@ -22,34 +26,52 @@ class ActivityPilihK : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val apiService = ApiClient.apiService
+        val call = apiService.getKendaraan()
+        call.enqueue(object : Callback<List<DataListKendaraan>> {
+            override fun onResponse(
+                call: Call<List<DataListKendaraan>>,
+                response: Response<List<DataListKendaraan>>
+            ) {
+                if (response.isSuccessful) {
+                    val dataListkendaraan = response.body() ?: emptyList()
+                    kenArrayList = ArrayList()
+
+                    for (kendaraan in dataListkendaraan){
+                        val dataListKendaraan = DataListKendaraan(
+                            img = kendaraan.img,
+                            nama = kendaraan.nama,
+                            harga = kendaraan.harga,
+                            status = kendaraan.status
+                        )
+                        kenArrayList.add(dataListKendaraan)
+                    }
+
+                    binding.listKendaraan.isClickable = true
+                    binding.listKendaraan.adapter = DataListKendaraanAdapter(this@ActivityPilihK, kenArrayList)
+                    binding.listKendaraan.setOnItemClickListener { parent, view, position, id ->
+                        val data = kenArrayList[position]
+
+                        val i = Intent(this@ActivityPilihK, ActivityPesanKendaraan::class.java)
+                        i.putExtra("img", data.img)
+                        i.putExtra("nama", data.nama)
+                        i.putExtra("harga", data.harga)
+                        i.putExtra("status", data.status)
+                        startActivity(i)
+                    }
+                } else {
+                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<DataListKendaraan>>, t: Throwable) {
+                Log.d("gagal", "Panggilan API gagal: ${t.message}")
+            }
+        })
+
         binding.icBack.setOnClickListener {
             onBackPressed()
-        }
-
-        val img = arrayOf(R.drawable.kendaraan1, R.drawable.kendaraan2, R.drawable.kendaraan3)
-        val nama = arrayOf("Vario", "Scoopy", "Beat")
-        val harga = arrayOf("30000", "25000", "20000")
-        val stat = arrayOf("Tersedia", "Tersedia", "Tidak Tersedia")
-
-        kenArrayList = ArrayList()
-
-        for ( i in img.indices){
-            val ken = DataListKendaraan(img[i], nama[i], harga[i], stat[i])
-            kenArrayList.add(ken)
-        }
-
-        binding.listKendaraan.isClickable = true
-        binding.listKendaraan.adapter = DataListKendaraanAdapter(this, kenArrayList)
-        binding.listKendaraan.setOnItemClickListener { parent, view, position, id ->
-            val img = img[position]
-            val nama = nama[position]
-            val harga = harga[position]
-
-            val i = Intent(this, ActivityPesanKendaraan::class.java)
-            i.putExtra("img", img)
-            i.putExtra("nama", nama)
-            i.putExtra("harga", harga)
-            startActivity(i)
         }
     }
 }

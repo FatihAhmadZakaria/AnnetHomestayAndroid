@@ -25,10 +25,11 @@ class ActivityBatalPesan : AppCompatActivity() {
             insets
         }
 
-        val itemSpinner = resources.getStringArray(R.array.spinner_batal)
+        val itemSpinner = arrayOf("Salah pesan", "Batal karena jadwal", "Alasan lain")
 
         val adapterSpinner = ArrayAdapter(this, android.R.layout.simple_spinner_item, itemSpinner)
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerBatal.adapter = adapterSpinner
         binding.spinnerBatal.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>,
@@ -37,12 +38,17 @@ class ActivityBatalPesan : AppCompatActivity() {
                 id: Long
             ) {
                 val selectedItem = parent.getItemAtPosition(position).toString()
-                Toast.makeText(this@ActivityBatalPesan, "Alasan: $selectedItem", Toast.LENGTH_SHORT).show()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // Nothing
             }
+        }
+
+        binding.pesanBatal.setOnClickListener {
+            val i = Intent(this, ActivityMain::class.java)
+            i.putExtra("open_fragment", "home")
+            startActivity(i)
         }
         binding.backBeranda.setOnClickListener {
             val i = Intent(this, ActivityMain::class.java)

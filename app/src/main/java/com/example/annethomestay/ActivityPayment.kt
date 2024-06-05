@@ -21,6 +21,9 @@ class ActivityPayment : AppCompatActivity() {
             insets
         }
 
+        val nama = intent.getStringExtra("nama")
+        binding.pesanNama.text = nama
+
         binding.backBeranda.setOnClickListener {
             val i = Intent(this, ActivityMain::class.java)
             i.putExtra("open_fragment", "home")

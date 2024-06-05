@@ -12,10 +12,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.annethomestay.databinding.ActivityPesanKendaraanBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.DecimalFormat
 
 class ActivityPesanKendaraan : AppCompatActivity() {
     private lateinit var binding: ActivityPesanKendaraanBinding
     private var durasiSewa: Int = 5 // Nilai awal durasi sewa
+    private var hargaPerJam: Int = 20000 // Harga per jam kendaraan
+    private val paymentMethods = mutableListOf<String>()
+    private val paymentDetails = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +36,20 @@ class ActivityPesanKendaraan : AppCompatActivity() {
         }
         setupPaymentSpinner()
 
-        val img = intent.getIntExtra("img", 0)
+        val img = intent.getStringExtra("img")
         val nama = intent.getStringExtra("nama")
         val harga = intent.getStringExtra("harga")
 
-        binding.imgKen.setImageResource(img)
+        val drawableId = resources.getIdentifier(img, "drawable", packageName)
+        if (drawableId != 0) {
+            binding.imgKen.setImageResource(drawableId)
+        } else {
+            binding.imgKen.setImageDrawable(null) // atau set gambar default jika tidak ditemukan
+        }
         binding.namaKen.text = nama
         binding.hargaPesanKen.text = harga
+
+        hargaPerJam = harga?.replace(".", "")?.toIntOrNull() ?: hargaPerJam
 
         binding.icBack.setOnClickListener {
             onBackPressed()
@@ -43,6 +57,7 @@ class ActivityPesanKendaraan : AppCompatActivity() {
 
         // Inisialisasi durasi awal
         binding.durasi.text = durasiSewa.toString()
+        updateTotalBayar()
 
         // Setup tombol plus dan minus
         binding.plus.setOnClickListener {
@@ -67,19 +82,26 @@ class ActivityPesanKendaraan : AppCompatActivity() {
         }
         binding.btPesanKen.setOnClickListener {
             val i = Intent(this, ActivityPayment::class.java)
+            i.putExtra("nama", nama)
             startActivity(i)
         }
+
+        fetchPaymentMethods()
     }
 
     private fun setupPaymentSpinner() {
-        val paymentMethods = arrayOf("Full di tempat", "Transfer dengan no rekening")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, paymentMethods)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.pengBayar.adapter = adapter
 
         binding.pengBayar.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                binding.detBank.visibility = if (position == 1) View.VISIBLE else View.GONE
+                if (position >= 0 && position < paymentDetails.size) {
+                    binding.detBank.visibility = View.VISIBLE
+                    binding.bankAccountTextView.text = paymentDetails[position]
+                } else {
+                    binding.detBank.visibility = View.GONE
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -88,8 +110,41 @@ class ActivityPesanKendaraan : AppCompatActivity() {
         }
     }
 
+    private fun fetchPaymentMethods() {
+        val apiService = ApiClient.apiService
+        val call = apiService.getMetodeBayar()
+        call.enqueue(object : Callback<List<MetodeBayar>> {
+            override fun onResponse(call: Call<List<MetodeBayar>>, response: Response<List<MetodeBayar>>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { methods ->
+                        for (method in methods) {
+                            paymentMethods.add(method.nama)
+                            paymentDetails.add(method.no)
+                        }
+                        (binding.pengBayar.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                    }
+                } else {
+                    Toast.makeText(this@ActivityPesanKendaraan, "Failed to fetch payment methods", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<MetodeBayar>>, t: Throwable) {
+                t.printStackTrace()
+                Toast.makeText(this@ActivityPesanKendaraan, "Failed to fetch payment methods", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun updateDurasiTextView() {
         binding.durasi.text = durasiSewa.toString()
+        updateTotalBayar()
+    }
+
+    private fun updateTotalBayar() {
+        val totalBayar = durasiSewa * hargaPerJam
+        val decimalFormat = DecimalFormat("#,##0.00")
+        val formattedTotalBayar = decimalFormat.format(totalBayar / 100.0)
+        binding.pengTotal.text = formattedTotalBayar
     }
 
     private fun showToast() {
