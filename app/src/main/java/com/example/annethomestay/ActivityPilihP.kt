@@ -44,6 +44,7 @@ class ActivityPilihP : AppCompatActivity() {
 
                     for (penginapan in dataListPenginapan) {
                         val dataListPenginapan = DataListPenginapan(
+                            id = penginapan.id,
                             img = penginapan.img,
                             imgFlip = penginapan.imgFlip, 
                             name = penginapan.name, 
@@ -62,6 +63,7 @@ class ActivityPilihP : AppCompatActivity() {
                         val data = penginapanArrayList[position]
 
                         val i = Intent(this@ActivityPilihP, ActivityPesanPenginapan::class.java)
+                        i.putExtra("id", data.id)
                         i.putExtra("img", data.img)
                         i.putExtra("imgSpin", data.imgFlip)
                         i.putExtra("name", data.name)

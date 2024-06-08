@@ -1,5 +1,6 @@
 package com.example.annethomestay
 
+import TransaksiResponsePenginapan
 import android.app.DatePickerDialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -7,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
@@ -18,6 +20,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.annethomestay.databinding.ActivityPesanPenginapanBinding
+import com.example.annethomestay.utils.SessionManager
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -26,6 +32,9 @@ import java.util.concurrent.TimeUnit
 class ActivityPesanPenginapan : AppCompatActivity() {
     private lateinit var binding: ActivityPesanPenginapanBinding
     private var jumlahKamar: Int = 1
+    private val paymentMethods = mutableListOf<String>()
+    private val paymentDetails = mutableListOf<String>()
+    private var selectedPaymentMethodId: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +74,11 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         initializeFlipperFromIntent()
 
         binding.btPesanPeng.setOnClickListener {
-            val i = Intent(this, ActivityPayment::class.java)
-            i.putExtra("nama", name)
-            startActivity(i)
+            val paymentMethodId = selectedPaymentMethodId
+            pesanPenginapan(paymentMethodId)
         }
+
+        fetchPaymentMethods()
 
         binding.plus.setOnClickListener {
             increaseRoomCount()
@@ -77,7 +87,37 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         binding.min.setOnClickListener {
             decreaseRoomCount()
         }
+
+        binding.pengBayar.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                if (position >= 0 && position < paymentDetails.size) {
+                    binding.detBank.visibility = View.VISIBLE
+                    binding.bankAccountTextView.text = paymentDetails[position]
+
+                    // Mendapatkan ID metode pembayaran berdasarkan posisi dalam daftar
+                    selectedPaymentMethodId = getPaymentMethodId(position)
+                } else {
+                    binding.detBank.visibility = View.GONE
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
+
     }
+
+    private fun getPaymentMethodId(position: Int): Long {
+        // Jika posisi 0, kembalikan 1 sebagai metode pembayaran default
+        return if (position == 0) {
+            1
+        } else {
+            // Jika posisi bukan 0, kembalikan posisi + 1
+            position + 1L
+        }
+    }
+
 
     private fun increaseRoomCount() {
         jumlahKamar++
@@ -118,8 +158,6 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         }
         binding.durasi.text = jumlahKamar.toString()
     }
-
-
 
     private fun initializeFlipperFromIntent() {
         val imgSpin = intent.getStringExtra("imgSpin")
@@ -163,20 +201,9 @@ class ActivityPesanPenginapan : AppCompatActivity() {
     }
 
     private fun setupPaymentSpinner() {
-        val paymentMethods = arrayOf("Full di tempat", "Transfer dengan no rekening")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, paymentMethods)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.pengBayar.adapter = adapter
-
-        binding.pengBayar.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                binding.detBank.visibility = if (position == 1) View.VISIBLE else View.GONE
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
-            }
-        }
     }
 
     private fun setupClipboard() {
@@ -201,7 +228,6 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-
         val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
             val selectedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
             binding.pengTglIn.setText(selectedDate)
@@ -210,6 +236,7 @@ class ActivityPesanPenginapan : AppCompatActivity() {
 
         datePickerDialog.show()
     }
+
     private fun showDatePickerDialogOut() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -223,5 +250,97 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         }, year, month, day)
 
         datePickerDialog.show()
+    }
+
+    private fun pesanPenginapan(paymentMethodId: Long) {
+        val sessionManager = SessionManager(this)
+        val userId = sessionManager.getUserId()
+        val penginapanId = intent.getIntExtra("id", 0)
+
+        val tglIn = binding.pengTglIn.text.toString()
+        val tglOut = binding.pengTglOut.text.toString()
+        val durasi = hitungSelisihHari(tglIn, tglOut)
+
+        val data = TransaksiPenginapan(
+            id_p = penginapanId,
+            id_mtd = paymentMethodId,
+            user_id = userId, // Pastikan ini benar
+            tgl_in = formatDateString(tglIn, "dd/MM/yyyy", "yyyy-MM-dd"),
+            tgl_out = formatDateString(tglOut, "dd/MM/yyyy", "yyyy-MM-dd"),
+            durasi_trans_p = durasi,
+            stat_trans_p = "pending",
+            total_bayar = 500000,
+        )
+
+        val apiService = ApiClient.apiService
+        apiService.transaksiPenginapan(data).enqueue(object : Callback<TransaksiResponsePenginapan> {
+            override fun onResponse(
+                call: Call<TransaksiResponsePenginapan>,
+                response: Response<TransaksiResponsePenginapan>
+            ) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse != null) {
+                        Log.d("API_SUCCESS", "Response: $apiResponse")
+                        Toast.makeText(this@ActivityPesanPenginapan, "Berhasil memesan penginapan", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.d("API_ERROR", "Response body is null")
+                        Toast.makeText(this@ActivityPesanPenginapan, "Gagal memesan penginapan: Response body is null", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    Log.d("API_ERROR", "Response error: $errorBody")
+                    Toast.makeText(this@ActivityPesanPenginapan, "Gagal memesan penginapan: ${response.message()} ${paymentMethodId}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<TransaksiResponsePenginapan>, t: Throwable) {
+                Log.d("API_FAILURE", "Failure message: ${t.message}")
+                Toast.makeText(this@ActivityPesanPenginapan, "Terjadi kesalahan: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun fetchPaymentMethods() {
+        val apiService = ApiClient.apiService
+        val call = apiService.getMetodeBayar()
+        call.enqueue(object : Callback<List<MetodeBayar>> {
+            override fun onResponse(
+                call: Call<List<MetodeBayar>>,
+                response: Response<List<MetodeBayar>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let { methods ->
+                        for (method in methods) {
+                            paymentMethods.add(method.nama)
+                            paymentDetails.add(method.no)
+                        }
+                        (binding.pengBayar.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                    }
+                } else {
+                    Toast.makeText(
+                        this@ActivityPesanPenginapan,
+                        "Failed to fetch payment methods",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<MetodeBayar>>, t: Throwable) {
+                t.printStackTrace()
+                Toast.makeText(
+                    this@ActivityPesanPenginapan,
+                    "Failed to fetch payment methods",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
+    private fun formatDateString(dateString: String, fromFormat: String, toFormat: String): String {
+        val fromDateFormat = SimpleDateFormat(fromFormat, Locale.getDefault())
+        val toDateFormat = SimpleDateFormat(toFormat, Locale.getDefault())
+        val date = fromDateFormat.parse(dateString)
+        return toDateFormat.format(date)
     }
 }

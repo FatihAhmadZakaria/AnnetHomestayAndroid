@@ -1,6 +1,5 @@
 package com.example.annethomestay
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,6 +11,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.example.annethomestay.databinding.FragmentProfileBinding
+import com.example.annethomestay.utils.SessionManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FragmentProfile : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -31,7 +35,7 @@ class FragmentProfile : Fragment() {
             startActivity(i)
         }
         binding.exit.setOnClickListener {
-            activity?.finish()
+            logoutUser()
         }
         binding.profileSecurity.setOnClickListener {
             showChangePasswordDialog()
@@ -40,6 +44,8 @@ class FragmentProfile : Fragment() {
             showChangePhoneDialog()
         }
     }
+
+
 
     private fun showChangePhoneDialog() {
         val dialogView = layoutInflater.inflate(R.layout.popup_phone, null)
@@ -135,4 +141,33 @@ class FragmentProfile : Fragment() {
     private fun changePhone(currentPhone: String, newPhone: String) {
         Toast.makeText(requireContext(), "Sukses ganti nomor", Toast.LENGTH_SHORT).show()
     }
+    private fun logoutUser() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = ApiClient.apiService.logout()
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        // Clear session data
+                        SessionManager(requireContext()).clear()
+                        // Navigate to login activity
+                        val intent = Intent(requireContext(), ActivityLogin::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
+                        // Show toast for successful logout
+                        Toast.makeText(requireContext(), "Logout successful", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Handle error cases based on your API response
+                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                        Toast.makeText(requireContext(), "Logout failed: $errorMessage", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    // Handle exception
+                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 }

@@ -43,7 +43,8 @@ class ActivityPilihK : AppCompatActivity() {
                             img = kendaraan.img,
                             nama = kendaraan.nama,
                             harga = kendaraan.harga,
-                            status = kendaraan.status
+                            status = kendaraan.status,
+                            id = kendaraan.id
                         )
                         kenArrayList.add(dataListKendaraan)
                     }
@@ -58,6 +59,7 @@ class ActivityPilihK : AppCompatActivity() {
                         i.putExtra("nama", data.nama)
                         i.putExtra("harga", data.harga)
                         i.putExtra("status", data.status)
+                        i.putExtra("id", data.id)
                         startActivity(i)
                     }
                 } else {

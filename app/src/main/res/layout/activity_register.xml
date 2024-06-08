@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="@string/inp_email"
-                android:inputType="textPassword"
+                android:inputType="textEmailAddress"
                 android:layout_below="@+id/et_reg_uname"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/et_rounded"
