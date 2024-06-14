@@ -57,7 +57,7 @@ class ActivityLogin : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val authResponse = response.body()
                         if (authResponse != null) {
-                            sessionManager.saveUser(authResponse.id, authResponse.email, authResponse.telepon)
+                            sessionManager.saveUser(authResponse.id)
 
                             val intent = Intent(this@ActivityLogin, ActivityMain::class.java)
                             startActivity(intent)

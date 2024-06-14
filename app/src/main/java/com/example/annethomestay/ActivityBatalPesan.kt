@@ -49,11 +49,13 @@ class ActivityBatalPesan : AppCompatActivity() {
             val i = Intent(this, ActivityMain::class.java)
             i.putExtra("open_fragment", "home")
             startActivity(i)
+            finish()
         }
         binding.backBeranda.setOnClickListener {
             val i = Intent(this, ActivityMain::class.java)
             i.putExtra("open_fragment", "home")
             startActivity(i)
+            finish()
         }
     }
 }

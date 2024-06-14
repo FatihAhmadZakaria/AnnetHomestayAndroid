@@ -28,11 +28,13 @@ class ActivityPayment : AppCompatActivity() {
             val i = Intent(this, ActivityMain::class.java)
             i.putExtra("open_fragment", "home")
             startActivity(i)
+            finish()
         }
 
         binding.pesanBatal.setOnClickListener {
             val i =Intent(this, ActivityBatalPesan::class.java)
             startActivity(i)
+            finish()
         }
     }
 }

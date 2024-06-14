@@ -2,6 +2,7 @@ package com.example.annethomestay
 
 import TransaksiResponse
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -223,6 +224,9 @@ class ActivityPesanKendaraan : AppCompatActivity() {
         val userId = sessionManager.getUserId()
         val kenId = intent.getIntExtra("id", 0)
 
+        // Mengurangi dua nol dari totalBayar
+        val totalBayarReduced = reduceTwoZeros(totalBayar)
+
         val data = TransaksiKendaraan(
             id_k = kenId,
             id_p = accommodationId,
@@ -230,7 +234,7 @@ class ActivityPesanKendaraan : AppCompatActivity() {
             user_id = userId,
             durasi_trans_k = durasi,
             stat_trans_k = "pending",
-            total_bayar = totalBayar
+            total_bayar = totalBayarReduced // Gunakan nilai totalBayar yang sudah dikurangi dua nol
         )
         val apiService = ApiClient.apiService
         apiService.transaksiKendaraan(data).enqueue(object : Callback<TransaksiResponse> {
@@ -241,11 +245,11 @@ class ActivityPesanKendaraan : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse != null) {
-                        Toast.makeText(
-                            this@ActivityPesanKendaraan,
-                            "Berhasil memesan kendaraan",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        // Berhasil memesan kendaraan, pindah ke halaman ActivityPayment
+                        val intent = Intent(this@ActivityPesanKendaraan, ActivityPayment::class.java)
+                        intent.putExtra("nama_penginapan", binding.btAntar.text.toString()) // Mengirim nama penginapan
+                        startActivity(intent)
+                        finish()
                     } else {
                         Toast.makeText(
                             this@ActivityPesanKendaraan,
@@ -272,7 +276,10 @@ class ActivityPesanKendaraan : AppCompatActivity() {
                 ).show()
             }
         })
+    }
 
+    private fun reduceTwoZeros(totalBayar: Int): Int {
+        return totalBayar / 100 // Mengurangi dua digit nol dari belakang
     }
 
     private fun getPaymentMethodId(paymentMethodName: String): Long {

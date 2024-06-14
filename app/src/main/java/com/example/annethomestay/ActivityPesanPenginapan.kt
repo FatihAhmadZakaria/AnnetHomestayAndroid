@@ -260,6 +260,7 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         val tglIn = binding.pengTglIn.text.toString()
         val tglOut = binding.pengTglOut.text.toString()
         val durasi = hitungSelisihHari(tglIn, tglOut)
+        val namaInap = binding.pengNama.text.toString()
 
         val data = TransaksiPenginapan(
             id_p = penginapanId,
@@ -281,8 +282,10 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse != null) {
-                        Log.d("API_SUCCESS", "Response: $apiResponse")
-                        Toast.makeText(this@ActivityPesanPenginapan, "Berhasil memesan penginapan", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@ActivityPesanPenginapan, ActivityPayment::class.java)
+                        intent.putExtra("nama", namaInap) // Mengirim nama penginapan
+                        startActivity(intent)
+                        finish()
                     } else {
                         Log.d("API_ERROR", "Response body is null")
                         Toast.makeText(this@ActivityPesanPenginapan, "Gagal memesan penginapan: Response body is null", Toast.LENGTH_SHORT).show()

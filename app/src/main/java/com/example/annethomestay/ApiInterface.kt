@@ -12,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiInterface {
     @GET("penginapan")
@@ -36,11 +37,17 @@ interface ApiInterface {
     suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
 
     @POST("logout")
-    suspend fun logout(): Response<LogoutResponse>  // Tidak perlu header token
+    suspend fun logout(): Response<LogoutResponse>
 
     @POST("transaksi_kendaraan")
     fun transaksiKendaraan(@Body transaction: TransaksiKendaraan): Call<TransaksiResponse>
 
     @POST("transaksi_penginapan")
     fun transaksiPenginapan(@Body transaction: TransaksiPenginapan): Call<TransaksiResponsePenginapan>
+
+    @GET("riwayat/{id}")
+    fun getRiwayat(@Path("id") id: Int): Call<List<DataListTransaksi>>
+
+    @GET("user/{id}")
+    suspend fun getUser(@Path("id") id: Int): Response<DataUser>
 }

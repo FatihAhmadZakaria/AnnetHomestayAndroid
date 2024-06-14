@@ -19,6 +19,8 @@ import kotlinx.coroutines.withContext
 
 class FragmentProfile : Fragment() {
     private lateinit var binding: FragmentProfileBinding
+    private lateinit var sessionManager: SessionManager
+    private var userId: Int = -1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,9 +45,16 @@ class FragmentProfile : Fragment() {
         binding.profilePhone.setOnClickListener {
             showChangePhoneDialog()
         }
+        sessionManager = SessionManager(requireContext())
+        userId = sessionManager.getUserId()
+
+        // Panggil fungsi untuk mengambil dan menampilkan data pengguna
+        if (userId != -1) {
+            getUserData(userId)
+        } else {
+            Toast.makeText(requireContext(), "User ID tidak tersedia", Toast.LENGTH_SHORT).show()
+        }
     }
-
-
 
     private fun showChangePhoneDialog() {
         val dialogView = layoutInflater.inflate(R.layout.popup_phone, null)
@@ -169,5 +178,34 @@ class FragmentProfile : Fragment() {
             }
         }
     }
+
+    private fun getUserData(userId: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = ApiClient.apiService.getUser(userId)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val user = response.body()
+                        if (user != null) {
+                            // Tampilkan data di UI
+                            binding.profileName.text = user.name
+                            binding.profileStatus.text = user.email
+                        } else {
+                            Toast.makeText(requireContext(), "Data pengguna tidak ditemukan", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "Gagal mendapatkan data pengguna", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
 
 }

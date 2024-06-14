@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp">
             <TextView
-                android:id="@+id/id_trans_peng"
+                android:id="@+id/id_riwayet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ID Transaksi"
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jenis Transaksi"
-                android:layout_below="@id/id_trans_peng"
+                android:layout_below="@id/id_riwayet"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"/>
             <TextView
