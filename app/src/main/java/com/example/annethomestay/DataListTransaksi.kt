@@ -8,3 +8,17 @@ data class DataListTransaksi(
     val durasi: Int,
     val stat: String
 )
+
+data class TransactionRequest(
+    val total_price: Int,
+    val first_name: String,
+    val last_name: String,
+    val email: String,
+    val phone: String,
+    val payment_type: String
+)
+
+data class MidtransResponse(
+    val token: String,
+    val redirect_url: String?
+)

@@ -32,7 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="15dp"
-        android:layout_below="@+id/head_promo">
+        android:layout_below="@+id/head_promo"
+        app:cardCornerRadius="10dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

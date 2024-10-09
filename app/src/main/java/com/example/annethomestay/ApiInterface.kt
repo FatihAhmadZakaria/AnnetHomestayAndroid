@@ -50,4 +50,7 @@ interface ApiInterface {
 
     @GET("user/{id}")
     suspend fun getUser(@Path("id") id: Int): Response<DataUser>
+
+    @POST("payment") // Ganti dengan endpoint yang sesuai di Laravel
+    fun createTransaction(@Body request: TransactionRequest): Call<MidtransResponse>
 }

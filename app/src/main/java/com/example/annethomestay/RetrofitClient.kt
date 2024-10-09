@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.100.17:8000/api/"
+    private const val BASE_URL = "http://192.168.100.100:8000/api/"
 
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -30,4 +30,9 @@ object ApiClient {
         .build()
 
     val apiService: ApiInterface = retrofit.create(ApiInterface::class.java)
+
+    private val createTran = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 }

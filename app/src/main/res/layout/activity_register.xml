@@ -8,13 +8,42 @@
     android:layout_height="match_parent"
     tools:context=".ActivityRegister">
 
-    <ImageView
-        android:id="@+id/img_reg"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/annet_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="180dp"/>
+    <LinearLayout
+        android:id="@+id/head_penginapan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/main_red">
+        <ImageView
+            android:id="@+id/ic_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_back"
+            android:layout_margin="15dp"/>
+        <TextView
+            android:id="@+id/text_about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daftar"
+            android:textSize="17sp"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/head_penginapan"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="10dp">
+        <ImageView
+            android:id="@+id/img_reg"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/promo2"
+            android:scaleType="centerCrop"/>
+    </androidx.cardview.widget.CardView>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

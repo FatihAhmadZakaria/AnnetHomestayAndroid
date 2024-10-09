@@ -50,4 +50,5 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.retrofit2.converter.gson)
     implementation (libs.logging.interceptor)
+    implementation ("com.midtrans:uikit:2.0.0-SANDBOX")
 }

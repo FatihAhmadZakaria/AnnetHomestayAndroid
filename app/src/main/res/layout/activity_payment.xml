@@ -6,13 +6,37 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityPayment"
-    android:padding="10dp">
+    tools:context=".ActivityPayment">
+
+    <LinearLayout
+        android:id="@+id/head_penginapan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/main_red">
+        <ImageView
+            android:id="@+id/ic_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_back"
+            android:layout_margin="15dp"/>
+        <TextView
+            android:id="@+id/text_about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Batalkan Pemesanan"
+            android:textSize="17sp"
+            android:textColor="@color/white"/>
+    </LinearLayout>
     
     <androidx.cardview.widget.CardView
         android:id="@+id/status_img"
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="250dp"
+        android:layout_below="@id/head_penginapan"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,7 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/status_img"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,11 +93,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:text="Batalkan pesanan?"
         android:layout_below="@+id/status_deskrip"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bt_rounded"
+        android:padding="7dp"/>
     <Button
         android:id="@+id/back_beranda"
         android:layout_width="match_parent"
@@ -81,6 +109,7 @@
         android:layout_alignParentBottom="true"
         android:text="Kembali ke beranda"
         android:textAllCaps="false"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white"
+        android:layout_margin="10dp"/>
 
 </RelativeLayout>
