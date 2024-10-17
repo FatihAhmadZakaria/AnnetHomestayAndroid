@@ -75,11 +75,11 @@ class ActivityTrialMidtrans : AppCompatActivity() {
     // Fungsi untuk membuat transaksi
     private fun createTransaction() {
         val transactionRequest = TransactionRequest(
-            total_price = 10000,
-            first_name = "Alex",
-            last_name = "Bouringgan",
-            email = "alexbour@example.com",
-            phone = "08123456789",
+            total_price = 900000,
+            first_name = "Fatih",
+            last_name = "Ahmad",
+            email = "fatihahmadzakaria@gmail.com",
+            phone = "081239492910",
             payment_type = "credit_card" // Ganti sesuai dengan jenis pembayaran yang dipilih
         )
 

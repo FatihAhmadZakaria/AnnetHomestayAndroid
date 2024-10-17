@@ -30,7 +30,7 @@ class ActivityRegister : AppCompatActivity() {
         }
 
         binding.btRegister.setOnClickListener {
-            val name = binding.etRegUname.text.toString()
+            val name = binding.etRegFname.text.toString()
             val email = binding.etRegEmail.text.toString()
             val password = binding.etRegPassword.text.toString()
 
