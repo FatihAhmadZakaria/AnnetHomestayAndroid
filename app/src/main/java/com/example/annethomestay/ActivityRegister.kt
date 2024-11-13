@@ -4,6 +4,7 @@ package com.example.annethomestay
 import RegisterRequest
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -30,16 +31,25 @@ class ActivityRegister : AppCompatActivity() {
         }
 
         binding.btRegister.setOnClickListener {
-            val name = binding.etRegFname.text.toString()
-            val email = binding.etRegEmail.text.toString()
-            val password = binding.etRegPassword.text.toString()
+            val email = binding.registerEmail.text.toString()
+            val namaDepan = binding.namaDepan.text.toString()
+            val namaBelakang = binding.namaBelakang.text.toString()
+            val password = binding.registerPassword.text.toString()
+            val phone = binding.registerPhone.text.toString()
 
-            if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-                registerUser(name, email, password)
+            if (email.isNotEmpty() && namaDepan.isNotEmpty() && namaBelakang.isNotEmpty() && password.isNotEmpty() && phone.isNotEmpty() ) {
+                registerUser(email, namaDepan, namaBelakang, password, phone)
             } else {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
             }
+            Log.d("Cek InputF", namaDepan)
+            Log.d("Cek InputR", namaBelakang)
+            Log.d("Cek InputE", email)
+            Log.d("Cek InputPA", password)
+            Log.d("Cek InputPH", phone)
         }
+
+
 
         binding.toLogin.setOnClickListener {
             val i = Intent(this, ActivityLogin::class.java)
@@ -47,32 +57,47 @@ class ActivityRegister : AppCompatActivity() {
         }
     }
 
-    private fun registerUser(name: String, email: String, password: String) {
+    private fun registerUser(email: String, namaDepan: String, namaBelakang: String, password: String, phone: String) {
         val apiService = ApiClient.apiService
-        val registerRequest = RegisterRequest(name, email, password)
+        val registerRequest = RegisterRequest(
+            email = email,
+            nama_depan = namaDepan,
+            nama_belakang = namaBelakang,
+            password = password,
+            phone = phone
+        )
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.register(registerRequest)
+                val response = apiService.register(registerRequest).execute()
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        // Registration successful
-                        Toast.makeText(this@ActivityRegister, "Registration successful", Toast.LENGTH_SHORT).show()
-                        val i = Intent(this@ActivityRegister, ActivityLogin::class.java)
-                        startActivity(i)
+                        Toast.makeText(
+                            this@ActivityRegister,
+                            "Registration successful",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        val intent = Intent(this@ActivityRegister, ActivityLogin::class.java)
+                        startActivity(intent)
+                        finish()
                     } else {
-                        // Registration failed
-                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                        Toast.makeText(this@ActivityRegister, "Registration failed: $errorMessage", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@ActivityRegister,
+                            "Registration failed",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             } catch (e: Exception) {
-                // An error occurred
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@ActivityRegister, "An error occurred: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@ActivityRegister,
+                        "An error occurred: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d("Register Request", "Nama Depan: $namaDepan, Nama Belakang: $namaBelakang, Phone: $phone, Email: $email, Password: $password")
                 }
             }
         }
     }
-
 }

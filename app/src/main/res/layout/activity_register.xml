@@ -59,7 +59,7 @@
             android:layout_alignParentBottom="true"
             android:padding="10dp">
             <EditText
-                android:id="@+id/et_reg_fname"
+                android:id="@+id/namaDepan"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="@string/inp_fname"
@@ -69,45 +69,45 @@
                 android:paddingStart="10dp"
                 tools:ignore="RtlSymmetry" />
             <EditText
-                android:id="@+id/et_reg_rname"
+                android:id="@+id/namaBelakang"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="@string/inp_rname"
                 android:inputType="text"
-                android:layout_below="@+id/et_reg_fname"
+                android:layout_below="@+id/namaDepan"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/et_rounded"
                 android:paddingStart="10dp"
                 tools:ignore="RtlSymmetry" />
             <EditText
-                android:id="@+id/et_reg_phone"
+                android:id="@+id/registerPhone"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="@string/inp_phone"
                 android:inputType="number"
-                android:layout_below="@+id/et_reg_rname"
+                android:layout_below="@+id/namaBelakang"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/et_rounded"
                 android:paddingStart="10dp"
                 tools:ignore="RtlSymmetry" />
             <EditText
-                android:id="@+id/et_reg_email"
+                android:id="@+id/registerEmail"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="@string/inp_email"
                 android:inputType="textEmailAddress"
-                android:layout_below="@+id/et_reg_phone"
+                android:layout_below="@+id/registerPhone"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/et_rounded"
                 android:paddingStart="10dp"
                 tools:ignore="RtlSymmetry,TextFields" />
             <EditText
-                android:id="@+id/et_reg_password"
+                android:id="@+id/registerPassword"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="@string/inp_pass"
                 android:inputType="textPassword"
-                android:layout_below="@+id/et_reg_email"
+                android:layout_below="@+id/registerEmail"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/et_rounded"
                 android:paddingStart="10dp"
@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="fill_horizontal"
                 android:id="@+id/sudah_daftar"
-                android:layout_below="@+id/et_reg_password"
+                android:layout_below="@+id/registerPassword"
                 android:layout_marginBottom="15dp">
                 <TextView
                     android:layout_width="wrap_content"

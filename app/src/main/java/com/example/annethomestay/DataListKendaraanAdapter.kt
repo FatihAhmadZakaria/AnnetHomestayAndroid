@@ -22,7 +22,6 @@ class DataListKendaraanAdapter (private val context: Context, private val arrayL
             viewHolder.imageView = view.findViewById(R.id.img_ken)
             viewHolder.textNama = view.findViewById(R.id.nama_ken)
             viewHolder.textHarga = view.findViewById(R.id.harga_ken)
-            viewHolder.textStat = view.findViewById(R.id.stat_ken)
             view.tag = viewHolder
         } else {
             viewHolder = view.tag as ViewHolder
@@ -33,7 +32,6 @@ class DataListKendaraanAdapter (private val context: Context, private val arrayL
         viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, drawableId))
         viewHolder.textNama.text = item.nama
         viewHolder.textHarga.text = item.harga
-        viewHolder.textStat.text = item.status
 
         return view!!
     }
@@ -41,6 +39,5 @@ class DataListKendaraanAdapter (private val context: Context, private val arrayL
         lateinit var imageView: ImageView
         lateinit var textNama: TextView
         lateinit var textHarga: TextView
-        lateinit var textStat: TextView
     }
 }

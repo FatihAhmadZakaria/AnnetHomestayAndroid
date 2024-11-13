@@ -29,10 +29,6 @@ object ApiClient {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
+    // Gunakan apiService untuk semua request
     val apiService: ApiInterface = retrofit.create(ApiInterface::class.java)
-
-    private val createTran = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
 }

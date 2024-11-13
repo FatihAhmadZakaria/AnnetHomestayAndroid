@@ -28,52 +28,50 @@ class ActivityPilihK : AppCompatActivity() {
         }
 
         val apiService = ApiClient.apiService
-        val call = apiService.getKendaraan()
-        call.enqueue(object : Callback<List<DataListKendaraan>> {
-            override fun onResponse(
-                call: Call<List<DataListKendaraan>>,
-                response: Response<List<DataListKendaraan>>
-            ) {
-                if (response.isSuccessful) {
-                    val dataListkendaraan = response.body() ?: emptyList()
-                    kenArrayList = ArrayList()
-
-                    for (kendaraan in dataListkendaraan){
-                        val dataListKendaraan = DataListKendaraan(
-                            img = kendaraan.img,
-                            nama = kendaraan.nama,
-                            harga = kendaraan.harga,
-                            status = kendaraan.status,
-                            id = kendaraan.id
-                        )
-                        kenArrayList.add(dataListKendaraan)
-                    }
-
-                    binding.listKendaraan.isClickable = true
-                    binding.listKendaraan.adapter = DataListKendaraanAdapter(this@ActivityPilihK, kenArrayList)
-                    binding.listKendaraan.setOnItemClickListener { parent, view, position, id ->
-                        val data = kenArrayList[position]
-
-                        val i = Intent(this@ActivityPilihK, ActivityPesanKendaraan::class.java)
-                        i.putExtra("img", data.img)
-                        i.putExtra("nama", data.nama)
-                        i.putExtra("harga", data.harga)
-                        i.putExtra("status", data.status)
-                        i.putExtra("id", data.id)
-                        startActivity(i)
-                    }
-                } else {
-                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<DataListKendaraan>>, t: Throwable) {
-                Log.d("gagal", "Panggilan API gagal: ${t.message}")
-            }
-        })
-
-        binding.icBack.setOnClickListener {
-            onBackPressed()
-        }
+//        val call = apiService.getKendaraan()
+//        call.enqueue(object : Callback<List<DataListKendaraan>> {
+//            override fun onResponse(
+//                call: Call<List<DataListKendaraan>>,
+//                response: Response<List<DataListKendaraan>>
+//            ) {
+//                if (response.isSuccessful) {
+//                    val dataListkendaraan = response.body() ?: emptyList()
+//                    kenArrayList = ArrayList()
+//
+//                    for (kendaraan in dataListkendaraan){
+//                        val dataListKendaraan = DataListKendaraan(
+//                            img = kendaraan.img,
+//                            nama = kendaraan.nama,
+//                            harga = kendaraan.harga,
+//                            id = kendaraan.id
+//                        )
+//                        kenArrayList.add(dataListKendaraan)
+//                    }
+//
+//                    binding.listKendaraan.isClickable = true
+//                    binding.listKendaraan.adapter = DataListKendaraanAdapter(this@ActivityPilihK, kenArrayList)
+//                    binding.listKendaraan.setOnItemClickListener { parent, view, position, id ->
+//                        val data = kenArrayList[position]
+//
+//                        val i = Intent(this@ActivityPilihK, ActivityPesanKendaraan::class.java)
+//                        i.putExtra("img", data.img)
+//                        i.putExtra("nama", data.nama)
+//                        i.putExtra("harga", data.harga)
+//                        i.putExtra("id", data.id)
+//                        startActivity(i)
+//                    }
+//                } else {
+//                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<DataListKendaraan>>, t: Throwable) {
+//                Log.d("gagal", "Panggilan API gagal: ${t.message}")
+//            }
+//        })
+//
+//        binding.icBack.setOnClickListener {
+//            onBackPressed()
+//        }
     }
 }

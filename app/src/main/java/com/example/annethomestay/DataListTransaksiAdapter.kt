@@ -14,14 +14,12 @@ class DataListTransaksiAdapter(context: Context, private val transaksiList: List
         val transaksi = getItem(position)
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_transaksi, parent, false)
 
-        val idTransPeng: TextView = view.findViewById(R.id.id_riwayet)
         val jenisTransPeng: TextView = view.findViewById(R.id.jenis_trans_peng)
         val statTransPeng: TextView = view.findViewById(R.id.stat_trans_peng)
         val totalTransPeng: TextView = view.findViewById(R.id.total_trans_peng)
         val tglTransPeng: TextView = view.findViewById(R.id.tgl_trans_peng)
 
         transaksi?.let {
-            idTransPeng.text = it.id.toString()
             jenisTransPeng.text = it.jenis
             statTransPeng.text = it.stat
             totalTransPeng.text = it.durasi.toString()

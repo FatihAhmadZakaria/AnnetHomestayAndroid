@@ -46,24 +46,39 @@ class ActivityLogin : AppCompatActivity() {
         }
     }
 
+    // Pastikan untuk menggunakan CoroutineScope dan handle response dengan benar.
     private fun loginUser(email: String, password: String) {
         val apiService = ApiClient.apiService
         val loginRequest = LoginRequest(email, password)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response: Response<AuthResponse> = apiService.login(loginRequest)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val authResponse = response.body()
-                        if (authResponse != null) {
-                            sessionManager.saveUser(authResponse.id)
+                val response: Response<AuthResponse> = apiService.login(loginRequest).execute()
 
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val authResponse = response.body()
+
+                        // Menyimpan access_token ke session
+                        sessionManager.saveToken(authResponse?.access_token ?: "")
+
+                        val userDetailsResponse = apiService.getUserDetails("Bearer ${authResponse?.access_token}").execute()
+
+                        if (userDetailsResponse.isSuccessful && userDetailsResponse.body() != null) {
+                            val user = userDetailsResponse.body()
+
+                            // Menyimpan id_user ke session
+                            sessionManager.saveUser(user?.id_user ?: 0)
+
+                            // Menampilkan nama depan sebagai toast
+                            Toast.makeText(this@ActivityLogin, "Welcome, ${user?.nama_depan}", Toast.LENGTH_SHORT).show()
+
+                            // Berpindah ke Activity utama
                             val intent = Intent(this@ActivityLogin, ActivityMain::class.java)
                             startActivity(intent)
                             finish()
                         } else {
-                            Toast.makeText(this@ActivityLogin, "Login failed: Empty response", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@ActivityLogin, "Failed to fetch user details", Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         Toast.makeText(this@ActivityLogin, "Login failed", Toast.LENGTH_SHORT).show()

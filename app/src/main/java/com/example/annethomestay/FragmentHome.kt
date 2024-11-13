@@ -28,46 +28,46 @@ class FragmentHome : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val apiService = ApiClient.apiService
-        val call = apiService.getPromo()
-        call.enqueue(object : Callback<List<DataListHome>> {
-            override fun onResponse(
-                call: Call<List<DataListHome>>,
-                response: Response<List<DataListHome>>
-            ) {
-                if (response.isSuccessful) {
-                    val dataListPromo = response.body() ?: emptyList()
-                    promoArrayList = ArrayList()
-
-                    for (promo in dataListPromo) {
-                        val dataListPromo = DataListHome(
-                            img = promo.img,
-                            nama = promo.nama,
-                            deskrip = promo.deskrip
-                        )
-                        promoArrayList.add(dataListPromo)
-                    }
-
-                    binding.listPromo.isClickable = true
-                    binding.listPromo.adapter = DataListHomeAdapter(requireContext(),promoArrayList)
-                    binding.listPromo.setOnItemClickListener { parent, view, position, id ->
-                        val data = dataListPromo[position]
-
-                        val i = Intent(requireContext(), ActivityPromo::class.java)
-                        i.putExtra("img", data.img)
-                        i.putExtra("nama", data.nama)
-                        i.putExtra("deskrip", data.deskrip)
-                        startActivity(i)
-                    }
-                } else {
-                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<DataListHome>>, t: Throwable) {
-                Log.d("gagal", "Panggilan API gagal: ${t.message}")
-            }
-
-        })
+//        val call = apiService.getPromo()
+//        call.enqueue(object : Callback<List<DataListHome>> {
+//            override fun onResponse(
+//                call: Call<List<DataListHome>>,
+//                response: Response<List<DataListHome>>
+//            ) {
+//                if (response.isSuccessful) {
+//                    val dataListPromo = response.body() ?: emptyList()
+//                    promoArrayList = ArrayList()
+//
+//                    for (promo in dataListPromo) {
+//                        val dataListPromo = DataListHome(
+//                            img = promo.img,
+//                            nama = promo.nama,
+//                            deskrip = promo.deskrip
+//                        )
+//                        promoArrayList.add(dataListPromo)
+//                    }
+//
+//                    binding.listPromo.isClickable = true
+//                    binding.listPromo.adapter = DataListHomeAdapter(requireContext(),promoArrayList)
+//                    binding.listPromo.setOnItemClickListener { parent, view, position, id ->
+//                        val data = dataListPromo[position]
+//
+//                        val i = Intent(requireContext(), ActivityPromo::class.java)
+//                        i.putExtra("img", data.img)
+//                        i.putExtra("nama", data.nama)
+//                        i.putExtra("deskrip", data.deskrip)
+//                        startActivity(i)
+//                    }
+//                } else {
+//                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<DataListHome>>, t: Throwable) {
+//                Log.d("gagal", "Panggilan API gagal: ${t.message}")
+//            }
+//
+//        })
 
 
         binding.icHomestay.setOnClickListener {

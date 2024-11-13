@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.example.annethomestay.databinding.ActivityTrialMidtransBinding
 import com.midtrans.sdk.corekit.core.MidtransSDK
 import com.midtrans.sdk.corekit.core.TransactionRequest
@@ -63,6 +64,11 @@ class ActivityTrialMidtrans : AppCompatActivity() {
             // Panggil fungsi untuk membuat transaksi
             createTransaction()
         }
+
+        getImageFromApi("01JCGN5TSGNYMPAKSFE9WK04YP.jpg")
+
+        // Sisa kode yang ada
+        enableEdgeToEdge()
     }
 
 
@@ -75,11 +81,11 @@ class ActivityTrialMidtrans : AppCompatActivity() {
     // Fungsi untuk membuat transaksi
     private fun createTransaction() {
         val transactionRequest = TransactionRequest(
-            total_price = 900000,
-            first_name = "Fatih",
-            last_name = "Ahmad",
-            email = "fatihahmadzakaria@gmail.com",
-            phone = "081239492910",
+            total_price = 390000,
+            first_name = "Royyan",
+            last_name = "Mustova",
+            email = "rmustova@gmail.com",
+            phone = "085156763911",
             payment_type = "credit_card" // Ganti sesuai dengan jenis pembayaran yang dipilih
         )
 
@@ -110,5 +116,16 @@ class ActivityTrialMidtrans : AppCompatActivity() {
             launcher, // ActivityResultLauncher
             snapToken // Snap Token dari Midtrans
         )
+    }
+
+    // Fungsi untuk memanggil API dan menampilkan gambar
+    private fun getImageFromApi(filename: String) {
+        // URL untuk gambar berdasarkan API
+        val imageUrl = "http://192.168.100.100:8000/api/images/$filename"
+
+        // Menggunakan Glide untuk memuat gambar
+        Glide.with(this)
+            .load(imageUrl) // URL gambar
+            .into(binding.imageView) // Tempatkan gambar di ImageView
     }
 }

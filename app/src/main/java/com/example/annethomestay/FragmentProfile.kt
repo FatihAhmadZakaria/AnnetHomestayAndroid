@@ -36,9 +36,7 @@ class FragmentProfile : Fragment() {
             val i = Intent(requireContext(),ActivityAbout::class.java)
             startActivity(i)
         }
-        binding.exit.setOnClickListener {
-            logoutUser()
-        }
+
         binding.profileSecurity.setOnClickListener {
             showChangePasswordDialog()
         }
@@ -49,11 +47,7 @@ class FragmentProfile : Fragment() {
         userId = sessionManager.getUserId()
 
         // Panggil fungsi untuk mengambil dan menampilkan data pengguna
-        if (userId != -1) {
-            getUserData(userId)
-        } else {
-            Toast.makeText(requireContext(), "User ID tidak tersedia", Toast.LENGTH_SHORT).show()
-        }
+
     }
 
     private fun showChangePhoneDialog() {
@@ -150,62 +144,4 @@ class FragmentProfile : Fragment() {
     private fun changePhone(currentPhone: String, newPhone: String) {
         Toast.makeText(requireContext(), "Sukses ganti nomor", Toast.LENGTH_SHORT).show()
     }
-    private fun logoutUser() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = ApiClient.apiService.logout()
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        // Clear session data
-                        SessionManager(requireContext()).clear()
-                        // Navigate to login activity
-                        val intent = Intent(requireContext(), ActivityLogin::class.java)
-                        startActivity(intent)
-                        requireActivity().finish()
-                        // Show toast for successful logout
-                        Toast.makeText(requireContext(), "Logout successful", Toast.LENGTH_SHORT).show()
-                    } else {
-                        // Handle error cases based on your API response
-                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                        Toast.makeText(requireContext(), "Logout failed: $errorMessage", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    // Handle exception
-                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun getUserData(userId: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = ApiClient.apiService.getUser(userId)
-
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val user = response.body()
-                        if (user != null) {
-                            // Tampilkan data di UI
-                            binding.profileName.text = user.name
-                            binding.profileStatus.text = user.email
-                        } else {
-                            Toast.makeText(requireContext(), "Data pengguna tidak ditemukan", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(requireContext(), "Gagal mendapatkan data pengguna", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-
-
 }

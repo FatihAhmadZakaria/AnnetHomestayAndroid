@@ -28,51 +28,51 @@ class ActivityPilihO : AppCompatActivity() {
         }
 
         val apiService = ApiClient.apiService
-        val call = apiService.getRekomendasi()
-        call.enqueue(object : Callback<List<DataListRekomendasi>> {
-            override fun onResponse(
-                call: Call<List<DataListRekomendasi>>,
-                response: Response<List<DataListRekomendasi>>
-            ) {
-                if (response.isSuccessful) {
-                    val dataListRekomendasi = response.body() ?: emptyList()
-                    objekArrayList = ArrayList()
-
-                    for (objek in dataListRekomendasi) {
-                        val dataListRekomendasi = DataListRekomendasi(
-                            imgObj = objek.imgObj,
-                            nameObj = objek.nameObj,
-                            deskrip = objek.deskrip,
-                            linkObj = objek.linkObj
-                        )
-                        objekArrayList.add(dataListRekomendasi)
-                    }
-
-                    binding.listRekObj.isClickable = true
-                    val adapter = DataListRekomendasiAdapter(this@ActivityPilihO, objekArrayList)
-                    binding.listRekObj.adapter = adapter
-                    binding.listRekObj.setOnItemClickListener { parent, view, position, id ->
-                        val data = objekArrayList[position]
-
-                        val i = Intent(this@ActivityPilihO, ActivityDetailObjek::class.java)
-                        i.putExtra("img", data.imgObj)
-                        i.putExtra("nama", data.nameObj)
-                        i.putExtra("deskrip", data.deskrip)
-                        i.putExtra("link", data.linkObj)
-                        startActivity(i)
-                    }
-                } else {
-                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<DataListRekomendasi>>, t: Throwable) {
-                Log.d("gagal", "Panggilan API gagal: ${t.message}")
-            }
-        })
-
-        binding.icBackObjek.setOnClickListener {
-            onBackPressed()
-        }
+//        val call = apiService.getRekomendasi()
+//        call.enqueue(object : Callback<List<DataListRekomendasi>> {
+//            override fun onResponse(
+//                call: Call<List<DataListRekomendasi>>,
+//                response: Response<List<DataListRekomendasi>>
+//            ) {
+//                if (response.isSuccessful) {
+//                    val dataListRekomendasi = response.body() ?: emptyList()
+//                    objekArrayList = ArrayList()
+//
+//                    for (objek in dataListRekomendasi) {
+//                        val dataListRekomendasi = DataListRekomendasi(
+//                            imgObj = objek.imgObj,
+//                            nameObj = objek.nameObj,
+//                            deskrip = objek.deskrip,
+//                            linkObj = objek.linkObj
+//                        )
+//                        objekArrayList.add(dataListRekomendasi)
+//                    }
+//
+//                    binding.listRekObj.isClickable = true
+//                    val adapter = DataListRekomendasiAdapter(this@ActivityPilihO, objekArrayList)
+//                    binding.listRekObj.adapter = adapter
+//                    binding.listRekObj.setOnItemClickListener { parent, view, position, id ->
+//                        val data = objekArrayList[position]
+//
+//                        val i = Intent(this@ActivityPilihO, ActivityDetailObjek::class.java)
+//                        i.putExtra("img", data.imgObj)
+//                        i.putExtra("nama", data.nameObj)
+//                        i.putExtra("deskrip", data.deskrip)
+//                        i.putExtra("link", data.linkObj)
+//                        startActivity(i)
+//                    }
+//                } else {
+//                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<DataListRekomendasi>>, t: Throwable) {
+//                Log.d("gagal", "Panggilan API gagal: ${t.message}")
+//            }
+//        })
+//
+//        binding.icBackObjek.setOnClickListener {
+//            onBackPressed()
+//        }
     }
 }

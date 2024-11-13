@@ -8,6 +8,7 @@ class SessionManager(context: Context) {
 
     companion object {
         const val USER_ID = "user_id"
+        const val ACCESS_TOKEN = "access_token"
     }
 
     fun saveUser(id: Int) {
@@ -16,9 +17,18 @@ class SessionManager(context: Context) {
         editor.apply()
     }
 
+    fun saveToken(token: String) {
+        val editor = prefs.edit()
+        editor.putString(ACCESS_TOKEN, token)
+        editor.apply()
+    }
 
     fun getUserId(): Int {
         return prefs.getInt(USER_ID, 0) // Default value adalah 0
+    }
+
+    fun getAccessToken(): String? {
+        return prefs.getString(ACCESS_TOKEN, null)
     }
 
     fun clear() {
@@ -27,3 +37,4 @@ class SessionManager(context: Context) {
         editor.apply()
     }
 }
+

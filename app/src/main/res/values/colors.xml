@@ -10,4 +10,7 @@
     <color name="main_red">#F00000</color>
     <color name="grey">#808080</color>
     <color name="abuabu">#A9A9A9</color>
+    <color name="abuabu1">#F8F8F8</color>
+    <color name="green">#55F55E</color>
+    <color name="blue">#0061FF</color>
 </resources>

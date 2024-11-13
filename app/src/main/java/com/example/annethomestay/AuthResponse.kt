@@ -1,8 +1,22 @@
+import com.google.gson.annotations.SerializedName
+
 data class RegisterRequest(
-    val name: String,
+    @SerializedName("email")
     val email: String,
-    val password: String
+
+    @SerializedName("nama_depan")
+    val nama_depan: String,
+
+    @SerializedName("nama_belakang")
+    val nama_belakang: String,
+
+    @SerializedName("password")
+    val password: String,
+
+    @SerializedName("phone")
+    val phone: String
 )
+
 
 data class LoginRequest(
     val email: String,
@@ -15,33 +29,14 @@ data class LogoutResponse(
 )
 
 data class AuthResponse(
-    val id: Int,
+    val access_token: String,
+    val token_type: String
+)
+
+data class UserDetailsResponse(
+    val id_user: Int,
+    val nama_depan: String,
     val email: String,
-    val telepon: String,
-    val username: String,
-    val message: String
+    val phone: String
 )
 
-
-data class TransaksiResponse(
-    val success: Boolean,
-    val transactionId: Int?,
-    val message: String?
-)
-
-data class TransaksiPenginapan(
-    val id_p: Int,
-    val id_mtd: Long,
-    val user_id: Int,
-    val tgl_in: String,
-    val tgl_out: String,
-    val durasi_trans_p: Int,
-    val stat_trans_p: String,
-    val total_bayar: Int,
-)
-
-data class TransaksiResponsePenginapan(
-    val success: Boolean,
-    val message: String,
-    val data: TransaksiPenginapan
-)
