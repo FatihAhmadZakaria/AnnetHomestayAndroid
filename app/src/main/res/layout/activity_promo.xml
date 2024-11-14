@@ -38,12 +38,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <ImageView
-                android:id="@+id/img_promo"
+<!--            <ImageView-->
+<!--                android:id="@+id/img_promo"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="150dp"-->
+<!--                android:src="@drawable/gladag1"-->
+<!--                android:scaleType="centerCrop"/>-->
+            <android.widget.ViewFlipper
+                android:id="@+id/imgFlipper"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:src="@drawable/gladag1"
-                android:scaleType="centerCrop"/>
+                android:layout_margin="5dp"
+                android:scaleType="centerCrop">
+            </android.widget.ViewFlipper>
             <TextView
                 android:id="@+id/nama_promo"
                 android:layout_width="wrap_content"

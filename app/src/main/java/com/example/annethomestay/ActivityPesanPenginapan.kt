@@ -4,14 +4,19 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.Spinner
+import android.widget.ViewFlipper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.example.annethomestay.databinding.ActivityPesanPenginapanBinding
 import java.util.Calendar
+
 private var durasi: Int = 1 // Inisialisasi durasi dengan nilai default
 
 class ActivityPesanPenginapan : AppCompatActivity() {
@@ -27,6 +32,42 @@ class ActivityPesanPenginapan : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val id = intent.getIntExtra("id", 0) // Default 0 jika tidak ada
+        val img = intent.getStringArrayListExtra("img") ?: arrayListOf() // Default empty list jika tidak ada
+        val nama = intent.getStringExtra("nama") ?: "Nama tidak tersedia"
+        val deskrip = intent.getStringExtra("deskrip") ?: "Deskripsi tidak tersedia"
+        val fitur = intent.getStringExtra("fitur") ?: "Fitur tidak tersedia"
+        val kapasitas = intent.getIntExtra("kapasitas", 0) // Default 0 jika tidak ada
+        val harga = intent.getIntExtra("harga", 0) // Default 0 jika tidak ada
+
+        binding.icBack.setOnClickListener {
+            onBackPressed()
+        }
+        // Menampilkan data ke UI
+        binding.pengNama.text = nama
+        binding.pengHarga.text = "Harga: $harga"
+        binding.pengDeskrip.text = deskrip
+        binding.pengFitur.text = fitur
+        binding.pengKapasitas.text = "Kapasitas: $kapasitas"
+
+        val flipper: ViewFlipper = findViewById(R.id.slider)
+
+        for (imgUrl in img) {
+            val imageView = ImageView(this)
+            imageView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            Glide.with(this)
+                .load(imgUrl)
+                .into(imageView)
+            flipper.addView(imageView)
+        }
+
+        flipper.setFlipInterval(3000)
+        flipper.startFlipping()
 
         // Plus minus jumlah
         durasiJumlahKamar()

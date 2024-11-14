@@ -30,7 +30,8 @@ data class LogoutResponse(
 
 data class AuthResponse(
     val access_token: String,
-    val token_type: String
+    val token_type: String,
+    val id_user: Int
 )
 
 data class UserDetailsResponse(

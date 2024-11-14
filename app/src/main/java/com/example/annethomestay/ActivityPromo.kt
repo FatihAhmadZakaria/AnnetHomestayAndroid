@@ -1,40 +1,52 @@
 package com.example.annethomestay
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.FragmentManager
+import com.bumptech.glide.Glide
 import com.example.annethomestay.databinding.ActivityPromoBinding
 
 class ActivityPromo : AppCompatActivity() {
+
     private lateinit var binding: ActivityPromoBinding
+    private lateinit var imgUrls: ArrayList<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityPromoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
         // Menerima data yang dikirim dari intent
-        val img = intent.getStringExtra("img")
+        imgUrls = intent.getStringArrayListExtra("img_urls") ?: arrayListOf()
         val nama = intent.getStringExtra("nama")
         val description = intent.getStringExtra("deskrip")
 
-        val drawableId = resources.getIdentifier(img, "drawable", packageName)
-        if (drawableId != 0) {
-            binding.imgPromo.setImageResource(drawableId)
-        } else {
-            binding.imgPromo.setImageDrawable(null) // atau set gambar default jika tidak ditemukan
-        }
+        // Menampilkan nama dan deskripsi promo
         binding.namaPromo.text = nama
         binding.deskripPromo.text = description
 
+        val flipper: ViewFlipper = findViewById(R.id.imgFlipper)
+
+        for (imgUrl in imgUrls) {
+            val imageView = ImageView(this)
+            imageView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            Glide.with(this)
+                .load(imgUrl)
+                .into(imageView)
+            flipper.addView(imageView)
+        }
+
+        flipper.setFlipInterval(3000)
+        flipper.startFlipping()
+
+
+        // Kembali ke halaman sebelumnya
         binding.icBackAbout.setOnClickListener {
             onBackPressed()
         }

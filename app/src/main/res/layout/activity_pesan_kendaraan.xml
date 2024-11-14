@@ -34,25 +34,27 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/img_ken"
+            <ViewFlipper
+                android:id="@+id/img_kend"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:src="@drawable/kendaraan1"
-                android:scaleType="centerCrop"/>
+                android:flipInterval="3000"
+                android:autoStart="true"
+                android:inAnimation="@anim/slide_in_right"
+                android:outAnimation="@anim/slide_out_left" />
             <androidx.cardview.widget.CardView
                 android:id="@+id/pemesanan_kendaraan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:layout_below="@+id/img_ken">
+                android:layout_below="@+id/img_kend">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginVertical="10dp">
                     <TextView
-                        android:id="@+id/nama_ken"
+                        android:id="@+id/ken_nama"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nama Kendaraan"
@@ -66,7 +68,7 @@
                         android:orientation="horizontal"
                         android:layout_marginHorizontal="10dp">
                         <TextView
-                            android:id="@+id/harga_pesan_ken"
+                            android:id="@+id/ken_harga"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="50000"
@@ -79,6 +81,16 @@
                             android:textSize="15sp"
                             android:textColor="@color/black"/>
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/ken_deskrip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Deskripsi"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="15dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"

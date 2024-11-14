@@ -3,11 +3,10 @@ package com.example.annethomestay
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.annethomestay.databinding.FragmentHomeBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,47 +26,64 @@ class FragmentHome : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val apiService = ApiClient.apiService
-//        val call = apiService.getPromo()
-//        call.enqueue(object : Callback<List<DataListHome>> {
-//            override fun onResponse(
-//                call: Call<List<DataListHome>>,
-//                response: Response<List<DataListHome>>
-//            ) {
-//                if (response.isSuccessful) {
-//                    val dataListPromo = response.body() ?: emptyList()
-//                    promoArrayList = ArrayList()
-//
-//                    for (promo in dataListPromo) {
-//                        val dataListPromo = DataListHome(
-//                            img = promo.img,
-//                            nama = promo.nama,
-//                            deskrip = promo.deskrip
-//                        )
-//                        promoArrayList.add(dataListPromo)
-//                    }
-//
-//                    binding.listPromo.isClickable = true
-//                    binding.listPromo.adapter = DataListHomeAdapter(requireContext(),promoArrayList)
-//                    binding.listPromo.setOnItemClickListener { parent, view, position, id ->
-//                        val data = dataListPromo[position]
-//
-//                        val i = Intent(requireContext(), ActivityPromo::class.java)
-//                        i.putExtra("img", data.img)
-//                        i.putExtra("nama", data.nama)
-//                        i.putExtra("deskrip", data.deskrip)
-//                        startActivity(i)
-//                    }
-//                } else {
-//                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<List<DataListHome>>, t: Throwable) {
-//                Log.d("gagal", "Panggilan API gagal: ${t.message}")
-//            }
-//
-//        })
+        val call = apiService.getPromo()
+
+        call.enqueue(object : Callback<List<Promo>> {
+            override fun onResponse(
+                call: Call<List<Promo>>,
+                response: Response<List<Promo>>
+            ) {
+                if (response.isSuccessful) {
+                    val promoList = response.body() ?: emptyList()
+                    promoArrayList = ArrayList()
+                    Log.d("PromoResponse", "Response JSON: ${response.body()}")
+
+                    // Memproses data promo dan gambar
+                    for (promo in promoList) {
+                        val imageUrls = promo.img.map { "http://192.168.100.100:8000/api/images/${it.img_path}" } // List gambar
+                        val fullImageUrlList = ArrayList(imageUrls)
+
+                        val dataListPromo = DataListHome(
+                            img = fullImageUrlList,
+                            nama = promo.nama,
+                            deskrip = promo.deskripsi
+                        )
+
+                        promoArrayList.add(dataListPromo)
+                    }
+
+
+                    // Menetapkan adapter dan menampilkan data di ListView
+                    binding.listPromo.isClickable = true
+                    binding.listPromo.adapter = DataListHomeAdapter(requireContext(), promoArrayList)
+
+                    binding.listPromo.setOnItemClickListener { _, _, position, _ ->
+                        val data = promoArrayList[position]
+
+                        // Membuat Intent untuk mengirimkan data ke ActivityPromo
+                        val i = Intent(requireContext(), ActivityPromo::class.java)
+
+                        // Mengirimkan list gambar ke ActivityPromo
+                        i.putStringArrayListExtra("img_urls", ArrayList(data.img))  // Kirim list gambar
+                        i.putExtra("nama", data.nama)
+                        i.putExtra("deskripsi", data.deskrip)
+
+                        startActivity(i)
+                    }
+                } else {
+                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Promo>>, t: Throwable) {
+                Log.d("gagal", "Panggilan API gagal: ${t.message}")
+            }
+        })
+
+
+
 
 
         binding.icHomestay.setOnClickListener {

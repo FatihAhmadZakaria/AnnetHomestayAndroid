@@ -7,37 +7,47 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 
-class DataListKendaraanAdapter (private val context: Context, private val arrayList: ArrayList<DataListKendaraan>) :
+class DataListKendaraanAdapter(context: Context, private val arrayList: ArrayList<DataListKendaraan>) :
     ArrayAdapter<DataListKendaraan>(context, R.layout.list_kendaraan, arrayList) {
+
+    private class ViewHolder(view: View) {
+        val imageView: ImageView = view.findViewById(R.id.img_ken)
+        val textNama: TextView = view.findViewById(R.id.nama_ken)
+        val textHarga: TextView = view.findViewById(R.id.harga_ken)
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var view = convertView
+        val view: View
         val viewHolder: ViewHolder
 
-        if (view == null) {
+        if (convertView == null) {
             val inflater = LayoutInflater.from(context)
             view = inflater.inflate(R.layout.list_kendaraan, parent, false)
-            viewHolder = ViewHolder()
-            viewHolder.imageView = view.findViewById(R.id.img_ken)
-            viewHolder.textNama = view.findViewById(R.id.nama_ken)
-            viewHolder.textHarga = view.findViewById(R.id.harga_ken)
+            viewHolder = ViewHolder(view)
             view.tag = viewHolder
         } else {
+            view = convertView
             viewHolder = view.tag as ViewHolder
         }
 
+        // Mendapatkan item pada posisi tertentu
         val item = arrayList[position]
-        val drawableId = context.resources.getIdentifier(item.img, "drawable", context.packageName)
-        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, drawableId))
-        viewHolder.textNama.text = item.nama
-        viewHolder.textHarga.text = item.harga
 
-        return view!!
-    }
-    private class ViewHolder {
-        lateinit var imageView: ImageView
-        lateinit var textNama: TextView
-        lateinit var textHarga: TextView
+        // Memuat gambar pertama dari daftar gambar dalam item menggunakan Glide
+        if (item.img.isNotEmpty()) {
+            Glide.with(context)
+                .load(item.img[0])  // Menggunakan gambar pertama dalam daftar
+                .placeholder(R.drawable.ic_home)  // Placeholder jika gambar gagal dimuat
+                .into(viewHolder.imageView)
+        } else {
+            viewHolder.imageView.setImageResource(R.drawable.ic_home)  // Gambar default jika daftar kosong
+        }
+
+        viewHolder.textNama.text = item.nama
+        viewHolder.textHarga.text = "${item.harga} /hari"
+
+        return view
     }
 }

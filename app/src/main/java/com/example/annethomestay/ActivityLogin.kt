@@ -5,6 +5,7 @@ import LoginRequest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -46,7 +47,6 @@ class ActivityLogin : AppCompatActivity() {
         }
     }
 
-    // Pastikan untuk menggunakan CoroutineScope dan handle response dengan benar.
     private fun loginUser(email: String, password: String) {
         val apiService = ApiClient.apiService
         val loginRequest = LoginRequest(email, password)
@@ -59,27 +59,19 @@ class ActivityLogin : AppCompatActivity() {
                     if (response.isSuccessful && response.body() != null) {
                         val authResponse = response.body()
 
-                        // Menyimpan access_token ke session
                         sessionManager.saveToken(authResponse?.access_token ?: "")
+                        sessionManager.saveUser(authResponse?.id_user ?: 0)
 
-                        val userDetailsResponse = apiService.getUserDetails("Bearer ${authResponse?.access_token}").execute()
+                        val storedToken = sessionManager.getAccessToken()
+                        val storedUserId = sessionManager.getUserId()
+                        Log.d("LoginUser", "Access Token (from session): $storedToken")
+                        Log.d("LoginUser", "User ID (from session): $storedUserId")
 
-                        if (userDetailsResponse.isSuccessful && userDetailsResponse.body() != null) {
-                            val user = userDetailsResponse.body()
+                        Toast.makeText(this@ActivityLogin, "Login successful, welcome!", Toast.LENGTH_SHORT).show()
 
-                            // Menyimpan id_user ke session
-                            sessionManager.saveUser(user?.id_user ?: 0)
-
-                            // Menampilkan nama depan sebagai toast
-                            Toast.makeText(this@ActivityLogin, "Welcome, ${user?.nama_depan}", Toast.LENGTH_SHORT).show()
-
-                            // Berpindah ke Activity utama
-                            val intent = Intent(this@ActivityLogin, ActivityMain::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            Toast.makeText(this@ActivityLogin, "Failed to fetch user details", Toast.LENGTH_SHORT).show()
-                        }
+                        val intent = Intent(this@ActivityLogin, ActivityMain::class.java)
+                        startActivity(intent)
+                        finish()
                     } else {
                         Toast.makeText(this@ActivityLogin, "Login failed", Toast.LENGTH_SHORT).show()
                     }
@@ -91,4 +83,5 @@ class ActivityLogin : AppCompatActivity() {
             }
         }
     }
+
 }
