@@ -1,14 +1,11 @@
 package com.example.annethomestay
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.annethomestay.databinding.FragmentTransactionBinding
 import com.example.annethomestay.utils.SessionManager
 import retrofit2.Call
@@ -17,7 +14,7 @@ import retrofit2.Response
 
 class FragmentTransaction : Fragment() {
     private lateinit var binding: FragmentTransactionBinding
-    private lateinit var transaksiList: ArrayList<DataListTransaksi>
+    private lateinit var transaksiList: ArrayList<Riwayat>
     private lateinit var adapter: DataListTransaksiAdapter
     private lateinit var sessionManager: SessionManager
 
@@ -37,17 +34,32 @@ class FragmentTransaction : Fragment() {
 
         transaksiList = ArrayList()
         adapter = DataListTransaksiAdapter(requireContext(), transaksiList)
-//        binding.listTransaksi.adapter = adapter
-//        binding.listTransaksi.setOnItemClickListener { parent, view, position, id ->
-//            val data = transaksiList[position]
-//            val intent = Intent(requireContext(), ActivityDetailTransaction::class.java)
-//            intent.putExtra("id_trans", data.id)
-//            intent.putExtra("tgl", data.tgl)
-//            intent.putExtra("jenis", data.jenis)
-//            intent.putExtra("nama", data.nama)
-//            intent.putExtra("durasi", data.durasi)
-//            intent.putExtra("stat", data.stat)
-//            startActivity(intent)
-//        }
+
+        val listView: ListView = binding.listTransaksi
+        listView.adapter = adapter
+
+        // Memanggil API untuk mendapatkan data transaksi
+        getTransaksiData(userId.toString())
+
     }
+    private fun getTransaksiData(userId: String) {
+        ApiClient.apiService.getRiwayat(userId.toInt()).enqueue(object :
+            Callback<RiwayatResponse> {  // Pastikan RiwayatResponse digunakan di sini
+            override fun onResponse(call: Call<RiwayatResponse>, response: Response<RiwayatResponse>) {
+                if (response.isSuccessful) {
+                    val transaksi = response.body()?.data ?: emptyList()
+                    transaksiList.clear()
+                    transaksiList.addAll(transaksi)
+                    adapter.notifyDataSetChanged()
+                } else {
+                    // Tangani error jika API tidak berhasil
+                }
+            }
+
+            override fun onFailure(call: Call<RiwayatResponse>, t: Throwable) {
+                // Tangani kegagalan API
+            }
+        })
+    }
+
 }

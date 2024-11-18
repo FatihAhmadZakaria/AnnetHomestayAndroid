@@ -11,10 +11,94 @@ class SessionManager(context: Context) {
         const val ACCESS_TOKEN = "access_token"
     }
 
+    // Menyimpan id_reservasi
+    fun saveReservasiId(id: Int) {
+        val editor = prefs.edit()
+        editor.putInt("id_reservasi", id)
+        editor.apply()
+    }
+
+    // Mendapatkan id_reservasi yang disimpan
+    fun getReservasiId(): Int {
+        return prefs.getInt("id_reservasi", -1) // -1 jika tidak ada id yang disimpan
+    }
+
+    // Menyimpan id_reservasi
+    fun saveIdKendaraan(id: Int) {
+        val editor = prefs.edit()
+        editor.putInt("id_kendaraan", id)
+        editor.apply()
+    }
+
+    // Mendapatkan id_reservasi yang disimpan
+    fun getIdKendaraan(): Int {
+        return prefs.getInt("id_kendaraan", -1) // -1 jika tidak ada id yang disimpan
+    }
+
+    // Menyimpan id_reservasi
+    fun saveIdProperti(id: Int) {
+        val editor = prefs.edit()
+        editor.putInt("id_properti", id)
+        editor.apply()
+    }
+
+    // Mendapatkan id_reservasi yang disimpan
+    fun getIdProperti(): Int {
+        return prefs.getInt("id_properti", -1) // -1 jika tidak ada id yang disimpan
+    }
+
+    // Menyimpan id_reservasi
+    fun saveTglMulai(tgl_mulai: String) {
+        val editor = prefs.edit()
+        editor.putString("tgl_mulai", tgl_mulai)
+        editor.apply()
+    }
+
+    // Mendapatkan id_reservasi yang disimpan
+    fun getTglMulai(): String {
+        return prefs.getString("tgl_mulai","") ?:"" // -1 jika tidak ada id yang disimpan
+    }
+
+    // Menyimpan id_reservasi
+    fun saveTglSelesai(tgl_selesai: String) {
+        val editor = prefs.edit()
+        editor.putString("tgl_selesai", tgl_selesai)
+        editor.apply()
+    }
+
+    // Mendapatkan id_reservasi yang disimpan
+    fun getTglSelesai(): String {
+        return prefs.getString("tgl_selesai","") ?:"" // -1 jika tidak ada id yang disimpan
+    }
+
     fun saveUser(id: Int) {
         val editor = prefs.edit()
         editor.putInt(USER_ID, id)
         editor.apply()
+    }
+    // Menyimpan id_reservasi
+    fun saveNama(nama: String) {
+        val editor = prefs.edit()
+        editor.putString("nama", nama)
+        editor.apply()
+    }
+
+    // Menyimpan id_reservasi
+    fun saveEmail(email: String) {
+        val editor = prefs.edit()
+        editor.putString("email", email)
+        editor.apply()
+    }
+
+    // Mendapatkan id_reservasi yang disimpan
+    fun getEmail(): String {
+        return prefs.getString("email","") ?:"" // -1 jika tidak ada id yang disimpan
+    }
+
+
+    // Mendapatkan id_reservasi yang disimpan
+    fun getNama(): String {
+        return prefs.getString("nama","") ?:"" // -1 jika tidak ada id yang disimpan
     }
 
     fun saveToken(token: String) {

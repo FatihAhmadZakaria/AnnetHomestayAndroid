@@ -2,7 +2,6 @@ package com.example.annethomestay
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +9,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.annethomestay.databinding.FragmentProfileBinding
 import com.example.annethomestay.utils.SessionManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class FragmentProfile : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -36,6 +32,11 @@ class FragmentProfile : Fragment() {
             val i = Intent(requireContext(),ActivityAbout::class.java)
             startActivity(i)
         }
+
+        val nama = SessionManager(requireContext()).getNama()
+        binding.profileName.text = nama
+        val email = SessionManager(requireContext()).getEmail()
+        binding.profileEmail.text = email
 
         binding.profileSecurity.setOnClickListener {
             showChangePasswordDialog()

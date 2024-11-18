@@ -4,7 +4,7 @@ data class DataListKendaraan(
     val id: Int,
     val img: ArrayList<String>,
     val nama: String,
-    val harga: String,
+    val harga: Int,
     val deskrip: String
 )
 
@@ -12,7 +12,7 @@ data class Kendaraan(
     val id: Int,
     val img: List<Images>,
     val nama: String,
-    val harga: String,
+    val harga: Int,
     val deskrip: String
 )
 

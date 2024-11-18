@@ -2,7 +2,6 @@ package com.example.annethomestay
 
 import AuthResponse
 import LoginRequest
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -61,6 +60,8 @@ class ActivityLogin : AppCompatActivity() {
 
                         sessionManager.saveToken(authResponse?.access_token ?: "")
                         sessionManager.saveUser(authResponse?.id_user ?: 0)
+                        sessionManager.saveNama(authResponse?.nama ?: "")
+                        sessionManager.saveEmail(authResponse?.email ?: "")
 
                         val storedToken = sessionManager.getAccessToken()
                         val storedUserId = sessionManager.getUserId()

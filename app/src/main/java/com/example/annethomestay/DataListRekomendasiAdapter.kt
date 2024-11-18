@@ -7,34 +7,47 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 
-class DataListRekomendasiAdapter(private val context: Context, private val arrayList: ArrayList<DataListRekomendasi>) :
-    ArrayAdapter<DataListRekomendasi>(context, R.layout.list_rek_obj, arrayList) {
+class DataListRekomendasiAdapter(
+    context: Context,
+    private val arrayList: ArrayList<DataListRekomendasi>
+) : ArrayAdapter<DataListRekomendasi>(context, R.layout.list_rek_obj, arrayList) {
+
+    private class ViewHolder(view: View) {
+        val imageView: ImageView = view.findViewById(R.id.img_obj)
+        val textNameObj: TextView = view.findViewById(R.id.name_obj)
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var view = convertView
+        val view: View
         val viewHolder: ViewHolder
 
-        if (view == null) {
+        if (convertView == null) {
             val inflater = LayoutInflater.from(context)
             view = inflater.inflate(R.layout.list_rek_obj, parent, false)
-            viewHolder = ViewHolder()
-            viewHolder.imageView = view.findViewById(R.id.img_rek_obj)
-            viewHolder.textView = view.findViewById(R.id.name_rek_obj)
+            viewHolder = ViewHolder(view)
             view.tag = viewHolder
         } else {
+            view = convertView
             viewHolder = view.tag as ViewHolder
         }
 
+        // Mendapatkan item pada posisi tertentu
         val item = arrayList[position]
-        val drawableId = context.resources.getIdentifier(item.imgObj, "drawable", context.packageName)
-        viewHolder.imageView.setImageDrawable(ContextCompat.getDrawable(context, drawableId))
-        viewHolder.textView.text = item.nameObj
 
-        return view!!
-    }
-    private class ViewHolder {
-        lateinit var imageView: ImageView
-        lateinit var textView: TextView
+        // Memuat gambar pertama dari daftar gambar dalam item menggunakan Glide
+        if (item.img.isNotEmpty()) {
+            Glide.with(context)
+                .load(item.img[0])  // Menggunakan gambar pertama dalam daftar
+                .placeholder(R.drawable.ic_home)  // Placeholder jika gambar gagal dimuat
+                .into(viewHolder.imageView)
+        } else {
+            viewHolder.imageView.setImageResource(R.drawable.ic_home)  // Gambar default jika daftar kosong
+        }
+
+        viewHolder.textNameObj.text = item.nama
+
+        return view
     }
 }

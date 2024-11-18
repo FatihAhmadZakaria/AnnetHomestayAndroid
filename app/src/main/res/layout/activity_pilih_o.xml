@@ -17,7 +17,7 @@
         android:background="@color/main_red"
         android:layout_alignParentTop="true">
         <ImageView
-            android:id="@+id/ic_back_objek"
+            android:id="@+id/ic_back"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_back"

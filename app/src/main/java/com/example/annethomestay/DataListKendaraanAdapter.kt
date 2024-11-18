@@ -46,7 +46,7 @@ class DataListKendaraanAdapter(context: Context, private val arrayList: ArrayLis
         }
 
         viewHolder.textNama.text = item.nama
-        viewHolder.textHarga.text = "${item.harga} /hari"
+        viewHolder.textHarga.text = item.harga.toString()
 
         return view
     }

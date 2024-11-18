@@ -1,8 +1,20 @@
 package com.example.annethomestay
 
 data class DataListRekomendasi(
-    val imgObj : String,
-    val nameObj : String,
-    val deskrip : String,
-    val linkObj : String
+    val img: ArrayList<String>,
+    val nama: String,
+    val deskripsi: String,
+    val link: String
 )
+
+data class Objek(
+    val img: List<Imeg>,
+    val nama: String,
+    val deskripsi: String,
+    val link: String
+)
+
+data class Imeg(
+    val img_path: String
+)
+

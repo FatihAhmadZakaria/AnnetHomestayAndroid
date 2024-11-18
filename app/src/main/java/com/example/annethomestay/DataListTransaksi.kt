@@ -22,3 +22,18 @@ data class MidtransResponse(
     val token: String,
     val redirect_url: String?
 )
+
+data class RiwayatResponse(
+    val data: List<Riwayat>,
+    val message: String
+)
+
+data class Riwayat(
+    val nama_produk: String,
+    val jenis: String,
+    val status: String,
+    val total: Int,
+    val tgl_mulai: String,
+    val tgl_selesai: String,
+    val tgl_transaksi: String
+)

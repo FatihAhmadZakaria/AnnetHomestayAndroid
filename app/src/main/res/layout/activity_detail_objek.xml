@@ -37,12 +37,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/img_obj"
+            <ViewFlipper
+                android:id="@+id/slider_objek"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:src="@drawable/gladag1"
-                android:scaleType="centerCrop"/>
+                android:layout_height="200dp"
+                android:flipInterval="3000"
+                android:autoStart="true"
+                android:inAnimation="@anim/slide_in_right"
+                android:outAnimation="@anim/slide_out_left" />
             <TextView
                 android:id="@+id/name_obj"
                 android:layout_width="match_parent"
@@ -53,7 +55,7 @@
                 android:justificationMode="inter_word"
                 android:layout_marginTop="15dp"
                 tools:ignore="UnusedAttribute"
-                android:layout_below="@+id/img_obj"
+                android:layout_below="@+id/slider_objek"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
             <TextView

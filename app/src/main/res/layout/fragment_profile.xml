@@ -40,10 +40,10 @@
                     android:textStyle="bold"
                     android:textSize="24sp"/>
                 <TextView
-                    android:id="@+id/profile_status"
+                    android:id="@+id/profile_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="status"
+                    android:text="email"
                     android:textSize="15sp"/>
             </LinearLayout>
 <!--            <View-->

@@ -3,11 +3,7 @@ package com.example.annethomestay
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.annethomestay.databinding.ActivityPilihOBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,63 +12,78 @@ import retrofit2.Response
 class ActivityPilihO : AppCompatActivity() {
     private lateinit var binding: ActivityPilihOBinding
     private lateinit var objekArrayList: ArrayList<DataListRekomendasi>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPilihOBinding.inflate(layoutInflater)
-        enableEdgeToEdge()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        // Memanggil API untuk mengambil data objek wisata
+        fetchObjekWisataData()
+        binding.icBack.setOnClickListener {
+            onBackPressed()
+        }    }
+
+    private fun fetchObjekWisataData() {
+        val apiService = ApiClient.apiService
+        val call = apiService.getObjek()
+
+        call.enqueue(object : Callback<List<Objek>> {
+            override fun onResponse(
+                call: Call<List<Objek>>,
+                response: Response<List<Objek>>
+            ) {
+                if (response.isSuccessful) {
+                    val objekList = response.body() ?: emptyList()
+                    objekArrayList = ArrayList()
+                    Log.d("ObjekWisataResponse", "Response JSON: ${response.body()}")
+
+                    for (objek in objekList) {
+                        // Ambil gambar pertama sebagai thumbnail
+                        val imageUrl = "http://192.168.100.100:8000/api/images/${objek.img[0].img_path}"
+
+                        // Ambil semua gambar untuk dikirim ke detail halaman
+                        val imageUrls = objek.img.map { "http://192.168.100.100:8000/api/images/${it.img_path}" }
+                        val fullImageUrlList = ArrayList(imageUrls)
+
+                        val dataListRekomendasi = DataListRekomendasi(
+                            img = fullImageUrlList,
+                            nama = objek.nama,
+                            deskripsi = objek.deskripsi,
+                            link = objek.link
+                        )
+
+                        objekArrayList.add(dataListRekomendasi)
+                    }
+
+                    setupListViewAdapter()
+                } else {
+                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Objek>>, t: Throwable) {
+                Log.d("gagal", "Panggilan API gagal: ${t.message}")
+            }
+        })
+    }
+
+    private fun setupListViewAdapter() {
+        binding.listRekObj.isClickable = true
+        val adapter = DataListRekomendasiAdapter(this, objekArrayList)
+        binding.listRekObj.adapter = adapter
+
+        binding.listRekObj.setOnItemClickListener { _, _, position, _ ->
+            val data = objekArrayList[position]
+            val intent = Intent(this, ActivityDetailObjek::class.java).apply {
+                putStringArrayListExtra("img", data.img) // Mengirim list gambar lengkap
+                putExtra("nama", data.nama)
+                putExtra("deskrip", data.deskripsi)
+                putExtra("link", data.link)
+            }
+            startActivity(intent)
         }
 
-        val apiService = ApiClient.apiService
-//        val call = apiService.getRekomendasi()
-//        call.enqueue(object : Callback<List<DataListRekomendasi>> {
-//            override fun onResponse(
-//                call: Call<List<DataListRekomendasi>>,
-//                response: Response<List<DataListRekomendasi>>
-//            ) {
-//                if (response.isSuccessful) {
-//                    val dataListRekomendasi = response.body() ?: emptyList()
-//                    objekArrayList = ArrayList()
-//
-//                    for (objek in dataListRekomendasi) {
-//                        val dataListRekomendasi = DataListRekomendasi(
-//                            imgObj = objek.imgObj,
-//                            nameObj = objek.nameObj,
-//                            deskrip = objek.deskrip,
-//                            linkObj = objek.linkObj
-//                        )
-//                        objekArrayList.add(dataListRekomendasi)
-//                    }
-//
-//                    binding.listRekObj.isClickable = true
-//                    val adapter = DataListRekomendasiAdapter(this@ActivityPilihO, objekArrayList)
-//                    binding.listRekObj.adapter = adapter
-//                    binding.listRekObj.setOnItemClickListener { parent, view, position, id ->
-//                        val data = objekArrayList[position]
-//
-//                        val i = Intent(this@ActivityPilihO, ActivityDetailObjek::class.java)
-//                        i.putExtra("img", data.imgObj)
-//                        i.putExtra("nama", data.nameObj)
-//                        i.putExtra("deskrip", data.deskrip)
-//                        i.putExtra("link", data.linkObj)
-//                        startActivity(i)
-//                    }
-//                } else {
-//                    Log.d("gagal", "Panggilan API gagal: ${response.message()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<List<DataListRekomendasi>>, t: Throwable) {
-//                Log.d("gagal", "Panggilan API gagal: ${t.message}")
-//            }
-//        })
-//
-//        binding.icBackObjek.setOnClickListener {
-//            onBackPressed()
-//        }
     }
+
 }
