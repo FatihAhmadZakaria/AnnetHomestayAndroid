@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -330,9 +331,22 @@ class ActivityPesanKendaraan : AppCompatActivity() {
                         if (responseBody != null) {
                             if (responseBody.success) {
                                 // Menampilkan ketersediaan jika sukses
+                                val ketersediaan = responseBody.ketersediaan
                                 Log.d("CekKetersediaan", "Ketersediaan: ${responseBody.ketersediaan}")
                                 Toast.makeText(this@ActivityPesanKendaraan, "Ketersediaan: ${responseBody.ketersediaan}", Toast.LENGTH_SHORT).show()
                                 binding.statusKendaraan.text = responseBody.ketersediaan.toString()
+                                // Validasi ketersediaan
+                                if (ketersediaan == "Tidak Tersedia") {
+                                    binding.btPesanKen.text = "Tidak Tersedia"
+                                    binding.btPesanKen.isEnabled = false
+                                    binding.btPesanKen.setBackgroundColor(
+                                        ContextCompat.getColor(this@ActivityPesanKendaraan, R.color.grey)
+                                    )
+                                } else {
+                                    binding.btPesanKen.text = "Pesan"
+                                    binding.btPesanKen.isEnabled = true
+                                    binding.btPesanKen.setBackgroundResource(R.drawable.bt_rounded)
+                                }
                             } else {
                                 // Jika ketersediaan tidak tersedia, tampilkan pesan error
                                 Log.e("CekKetersediaan", "Error: ${responseBody.success}")

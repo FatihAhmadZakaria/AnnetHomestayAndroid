@@ -43,3 +43,19 @@ data class UserDetailsResponse(
     val phone: String
 )
 
+data class PasswordUpdateRequest(
+    val sandi_lama: String,
+    val sandi_baru: String
+)
+
+data class PhoneUpdateRequest(
+    val no_lama: String,
+    val no_baru: String
+)
+
+data class GenericResponse(
+    val success: Boolean,
+    val message: String
+)
+
+

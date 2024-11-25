@@ -1,5 +1,7 @@
 package com.example.annethomestay
 
+import PasswordUpdateRequest
+import PhoneUpdateRequest
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +14,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.annethomestay.databinding.FragmentProfileBinding
 import com.example.annethomestay.utils.SessionManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FragmentProfile : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -88,7 +94,6 @@ class FragmentProfile : Fragment() {
         dialog.show() // Pastikan untuk memanggil show() agar dialog muncul
     }
 
-
     private fun showChangePasswordDialog() {
         val dialogView = layoutInflater.inflate(R.layout.popup_security, null)
         val currentPassword = dialogView.findViewById<EditText>(R.id.et_sec_old)
@@ -115,17 +120,20 @@ class FragmentProfile : Fragment() {
                 val newPass = newPassword.text.toString()
                 val confirmPass = confirmPassword.text.toString()
 
-                // Lakukan validasi dan logika untuk mengganti password
-                if (newPass == confirmPass) {
-                    // Panggil fungsi untuk mengganti password di sini
-                    changePassword(currentPass, newPass)
-                    dialog.dismiss()
-                } else {
-                    // Tampilkan pesan kesalahan jika password tidak cocok
-                    Toast.makeText(requireContext(), "Konfirmasi password tidak cocok!", Toast.LENGTH_SHORT).show()
-                    // Jangan dismiss dialog di sini
+                if (newPass.isEmpty() || confirmPass.isEmpty() || currentPass.isEmpty()) {
+                    Toast.makeText(requireContext(), "Semua field harus diisi!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 }
+
+                if (newPass != confirmPass) {
+                    Toast.makeText(requireContext(), "Konfirmasi password tidak cocok!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                changePassword(currentPass, newPass)
+                dialog.dismiss()
             }
+
 
             negativeButton.setOnClickListener {
                 dialog.dismiss()
@@ -135,14 +143,52 @@ class FragmentProfile : Fragment() {
         dialog.show()
     }
 
-
     private fun changePassword(currentPass: String, newPass: String) {
-        // Implementasikan logika untuk mengganti password di sini
-        // Misalnya, Anda dapat memanggil API atau memperbarui database
-        Toast.makeText(requireContext(), "Sukses ganti password", Toast.LENGTH_SHORT).show()
+        val token = "Bearer ${sessionManager.getAccessToken()}" // Dapatkan token dari SessionManager
+        val passwordRequest = PasswordUpdateRequest(sandi_lama = currentPass, sandi_baru = newPass)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val apiService = ApiClient.apiService
+                val response = apiService.updatePassword(token, passwordRequest)
+
+                withContext(Dispatchers.Main) {
+                    if (response.success) {
+                        Toast.makeText(requireContext(), "Password berhasil diubah", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun changePhone(currentPhone: String, newPhone: String) {
-        Toast.makeText(requireContext(), "Sukses ganti nomor", Toast.LENGTH_SHORT).show()
+        val token = "Bearer ${sessionManager.getAccessToken()}" // Dapatkan token dari SessionManager
+        val phoneRequest = PhoneUpdateRequest(no_lama = currentPhone, no_baru = newPhone)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val apiService = ApiClient.apiService
+                val response = apiService.updatePhone(token, phoneRequest)
+
+                withContext(Dispatchers.Main) {
+                    if (response.success) {
+                        Toast.makeText(requireContext(), "Nomor telepon berhasil diubah", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
+
 }

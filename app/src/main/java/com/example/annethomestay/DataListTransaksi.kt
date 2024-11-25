@@ -1,12 +1,14 @@
 package com.example.annethomestay
 
 data class DataListTransaksi(
-    val id: Int,
-    val tgl: String,
+    val id_reservasi: Int,
+    val nama_produk: String,
     val jenis: String,
-    val nama: String,
-    val durasi: Int,
-    val stat: String
+    val status: String,
+    val total: Int,
+    val tgl_mulai: String,
+    val tgl_selesai: String,
+    val snap_token:String
 )
 
 data class TransactionRequest(
@@ -29,11 +31,24 @@ data class RiwayatResponse(
 )
 
 data class Riwayat(
+    val id_reservasi: Int,
     val nama_produk: String,
     val jenis: String,
     val status: String,
     val total: Int,
     val tgl_mulai: String,
     val tgl_selesai: String,
-    val tgl_transaksi: String
+    val tgl_transaksi: String,
+    val snap_token:String
+)
+
+data class RequestBatal(
+    val id_reservasi: Int,
+    val alasan_pembatalan: String
+)
+
+data class ResponseBatal(
+    val success: Boolean,
+    val message: String,
+    val jumlah_refund: Int
 )

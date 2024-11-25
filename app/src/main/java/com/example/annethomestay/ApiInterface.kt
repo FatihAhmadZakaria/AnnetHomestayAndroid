@@ -1,12 +1,16 @@
 package com.example.annethomestay
 
 import AuthResponse
+import GenericResponse
 import LoginRequest
+import PasswordUpdateRequest
+import PhoneUpdateRequest
 import RegisterRequest
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -55,5 +59,22 @@ interface ApiInterface {
         @Body request: CekKetersediaanRequest,
         @Path("id_properti") idProperti: Int
     ): Response<CekKetersediaanResponseKen>
+
+    @POST("update-password")
+    suspend fun updatePassword(
+        @Header("Authorization") token: String,
+        @Body passwordUpdateRequest: PasswordUpdateRequest
+    ): GenericResponse
+
+    @POST("update-phone")
+    suspend fun updatePhone(
+        @Header("Authorization") token: String,
+        @Body phoneUpdateRequest: PhoneUpdateRequest
+    ): GenericResponse
+
+    @POST("pembatalan")
+    suspend fun pembatalan(
+        @Body requestBatal: RequestBatal
+    ): Response<ResponseBatal>
 }
 

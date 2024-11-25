@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -39,6 +40,7 @@ import java.time.temporal.ChronoUnit
 import java.util.Calendar
 
 private var durasi: Int = 1 // Inisialisasi durasi dengan nilai default
+private var ketersediaans: Int = 1
 
 
 class ActivityPesanPenginapan : AppCompatActivity() {
@@ -153,11 +155,6 @@ class ActivityPesanPenginapan : AppCompatActivity() {
             }
         }
 
-
-        // Mengambil tanggal mulai dan selesai
-        val tglMulai = tglCheckin.text.toString()
-        val tglSelesai = tglCheckout.text.toString()
-
         binding.btPesanPeng.setOnClickListener {
             updateHarga()
             val jumlahPesan = jumlahSewa
@@ -260,35 +257,32 @@ class ActivityPesanPenginapan : AppCompatActivity() {
     }
 
     private fun updateHarga() {
-        // Mengecek apakah checkinDate dan checkoutDate tidak null
         val daysBetween = if (checkinDate != null && checkoutDate != null) {
-            // Menghitung selisih hari jika kedua tanggal ada
-            ChronoUnit.DAYS.between(checkinDate, checkoutDate).toInt()
+            // Menghitung jumlah hari jika kedua tanggal ada
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ChronoUnit.DAYS.between(checkinDate, checkoutDate).toInt()
+            } else {
+                1
+            }
         } else {
-            // Jika salah satu atau kedua tanggal tidak ada, set default menjadi 1
-            1
+            1 // Default menjadi 1 jika salah satu atau kedua tanggal tidak ada
         }
 
         if (daysBetween < 0) {
             Toast.makeText(this, "Tanggal check-out harus setelah check-in!", Toast.LENGTH_SHORT).show()
-        } else {
-            // Menampilkan jumlah hari menginap
-            Toast.makeText(this, "Jumlah hari menginap: $daysBetween hari", Toast.LENGTH_SHORT).show()
+            return
         }
 
-        // Mengambil harga dari intent dan menghitung jumlah DP
+        val jumlahPesanan = binding.durasi.text.toString().toInt()
         val harga = intent.getIntExtra("harga", 0)
         val jumlahDpSatuan = (harga * 0.1).toInt()
-        val jumlahPesanan = binding.durasi.text.toString().toInt()
         val jumlahDp = jumlahDpSatuan * jumlahPesanan * daysBetween
         jumlahSewa = jumlahPesanan * daysBetween // Menyimpan jumlah sewa di tingkat kelas
 
-        // Menampilkan total harga
         binding.pengTotal.text = jumlahDp.toString()
 
         val tglCI = SessionManager(this@ActivityPesanPenginapan).getTglMulai()
         val tglCO = SessionManager(this@ActivityPesanPenginapan).getTglSelesai()
-
         val idReservasi = SessionManager(this@ActivityPesanPenginapan).getIdProperti()
         cekKetersediaan(idProperti = idReservasi, tglMulai = tglCI, tglSelesai = tglCO)
     }
@@ -352,10 +346,6 @@ class ActivityPesanPenginapan : AppCompatActivity() {
     }
 
     fun cekKetersediaan(idProperti: Int, tglMulai: String, tglSelesai: String) {
-        // Menggunakan CoroutineScope untuk menjalankan operasi di background thread (IO)
-        Log.d("IDCEK", idProperti.toString())
-        Log.d("MULAICEK", tglMulai)
-        Log.d("SELESAICEK", tglSelesai)
         CoroutineScope(Dispatchers.IO).launch {
             val request = CekKetersediaanRequest(tglMulai, tglSelesai)
 
@@ -370,9 +360,29 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                         if (responseBody != null) {
                             if (responseBody.success) {
                                 // Menampilkan ketersediaan jika sukses
-                                Log.d("CekKetersediaan", "Ketersediaan: ${responseBody.ketersediaan}")
-                                Toast.makeText(this@ActivityPesanPenginapan, "Ketersediaan: ${responseBody.ketersediaan}", Toast.LENGTH_SHORT).show()
+                                val ketersediaan = responseBody.ketersediaan
                                 binding.pengSlot.text = responseBody.ketersediaan.toString()
+                                ketersediaans = responseBody.ketersediaan
+
+                                // Validasi ketersediaan
+                                if (ketersediaan <= 0) {
+                                    binding.btPesanPeng.text = "Full"
+                                    binding.btPesanPeng.isEnabled = false
+                                    binding.btPesanPeng.setBackgroundColor(
+                                        ContextCompat.getColor(this@ActivityPesanPenginapan, R.color.grey)
+                                    )
+                                } else if (ketersediaan < durasi) {
+                                    binding.btPesanPeng.text = "Melebihi ketersediaan"
+                                    binding.btPesanPeng.isEnabled = false
+                                    binding.btPesanPeng.setBackgroundColor(
+                                        ContextCompat.getColor(this@ActivityPesanPenginapan, R.color.grey)
+                                    )
+                                } else {
+                                    binding.btPesanPeng.text = "Pesan"
+                                    binding.btPesanPeng.isEnabled = true
+                                    binding.btPesanPeng.setBackgroundResource(R.drawable.bt_rounded)
+                                }
+
                             } else {
                                 // Jika ketersediaan tidak tersedia, tampilkan pesan error
                                 Log.e("CekKetersediaan", "Error: ${responseBody.success}")
@@ -385,7 +395,12 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                     } else {
                         // Jika request gagal
                         Log.e("CekKetersediaan", "Request gagal dengan status: ${response.code()}")
-                        Toast.makeText(this@ActivityPesanPenginapan, "Request gagal dengan status: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ActivityPesanPenginapan, "Masukan ulang tanggal check-out", Toast.LENGTH_LONG).show()
+                        binding.btPesanPeng.text = "Pending"
+                        binding.btPesanPeng.isEnabled = false
+                        binding.btPesanPeng.setBackgroundColor(
+                            ContextCompat.getColor(this@ActivityPesanPenginapan, R.color.grey)
+                        )
                     }
                 }
             } catch (e: Exception) {

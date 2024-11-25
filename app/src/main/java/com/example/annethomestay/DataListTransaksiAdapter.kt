@@ -6,8 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 
-class DataListTransaksiAdapter(private val context: Context, private val transaksiList: ArrayList<Riwayat>) : BaseAdapter() {
+class DataListTransaksiAdapter(
+    private val context: Context,
+    private val transaksiList: ArrayList<Riwayat>,
+    private val listener: FragmentTransaction
+) : BaseAdapter() {
 
     override fun getCount(): Int {
         return transaksiList.size
@@ -20,6 +25,7 @@ class DataListTransaksiAdapter(private val context: Context, private val transak
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
+
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
@@ -36,7 +42,7 @@ class DataListTransaksiAdapter(private val context: Context, private val transak
 
         val transaksi = transaksiList[position]
 
-        // Mengatur data ke TextView yang ada pada layout
+        // Set data
         holder.namaProduk.text = transaksi.nama_produk
         holder.jenisTransaksi.text = transaksi.jenis
         holder.statusTransaksi.text = transaksi.status
@@ -44,6 +50,28 @@ class DataListTransaksiAdapter(private val context: Context, private val transak
         holder.tglTransaksi.text = transaksi.tgl_transaksi
         holder.tglMulai.text = transaksi.tgl_mulai
         holder.tglSelesai.text = transaksi.tgl_selesai
+
+        // Logika visibilitas tombol
+        holder.cardBayar.visibility = if (transaksi.status.equals("pending", true)) View.VISIBLE else View.GONE
+        holder.cardBatal.visibility = if (transaksi.status.equals("Pending", true) || transaksi.status.equals("DP", true)) View.VISIBLE else View.GONE
+
+//        // Klik tombol "Bayar"
+//        holder.cardBayar.setOnClickListener {
+//            listener.onBayarClicked(transaksi.snap_token)
+//        }
+//
+//        // Klik tombol "Batalkan"
+//        holder.cardBatal.setOnClickListener {
+//            listener.onBatalkanClicked(transaksi.id_reservasi)
+//        }
+        holder.cardBayar.setOnClickListener {
+            listener.onBayarClicked(transaksi.snap_token)
+        }
+
+        holder.cardBatal.setOnClickListener {
+            listener.onBatalkanClicked(transaksi.id_reservasi)
+        }
+
 
         return view
     }
@@ -56,5 +84,7 @@ class DataListTransaksiAdapter(private val context: Context, private val transak
         val tglTransaksi: TextView = view.findViewById(R.id.tgl_transaksi)
         val tglMulai: TextView = view.findViewById(R.id.tgl_mulai)
         val tglSelesai: TextView = view.findViewById(R.id.tgl_selesai)
+        val cardBayar: CardView = view.findViewById(R.id.card_bayar)
+        val cardBatal: CardView = view.findViewById(R.id.card_batal)
     }
 }
