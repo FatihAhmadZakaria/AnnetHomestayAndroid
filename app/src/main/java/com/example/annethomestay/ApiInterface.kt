@@ -76,5 +76,10 @@ interface ApiInterface {
     suspend fun pembatalan(
         @Body requestBatal: RequestBatal
     ): Response<ResponseBatal>
+
+    @POST("logout")
+    suspend fun logout(
+        @Header("Authorization") token: String,
+    ): GenericResponse
 }
 

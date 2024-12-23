@@ -42,7 +42,7 @@ class FragmentHome : Fragment() {
 
                     // Memproses data promo dan gambar
                     for (promo in promoList) {
-                        val imageUrls = promo.img.map { "http://192.168.100.100:8000/api/images/${it.img_path}" } // List gambar
+                        val imageUrls = promo.img.map { "https://annet.nosveratu.com/storage/app/public/${it.img_path}" } // List gambar
                         val fullImageUrlList = ArrayList(imageUrls)
 
                         val dataListPromo = DataListHome(
@@ -81,10 +81,6 @@ class FragmentHome : Fragment() {
                 Log.d("gagal", "Panggilan API gagal: ${t.message}")
             }
         })
-
-
-
-
 
         binding.icHomestay.setOnClickListener {
             val i = Intent(requireContext(), ActivityPilihP::class.java)

@@ -66,6 +66,7 @@ class ActivityDetailObjek : AppCompatActivity() {
             }
         }
     }
+
     private fun openGoogleMaps(link: String) {
         try {
             val uri = Uri.parse(link)

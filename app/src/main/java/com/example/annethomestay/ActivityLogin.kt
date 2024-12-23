@@ -44,6 +44,14 @@ class ActivityLogin : AppCompatActivity() {
             val password = findViewById<EditText>(R.id.et_log_password).text.toString()
             loginUser(email, password)
         }
+
+        binding.toRegister.setOnClickListener {
+            val i = Intent(this@ActivityLogin, ActivityRegister::class.java)
+            startActivity(i)
+        }
+        binding.icBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun loginUser(email: String, password: String) {

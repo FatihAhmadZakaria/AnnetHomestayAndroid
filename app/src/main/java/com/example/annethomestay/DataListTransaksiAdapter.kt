@@ -55,15 +55,6 @@ class DataListTransaksiAdapter(
         holder.cardBayar.visibility = if (transaksi.status.equals("pending", true)) View.VISIBLE else View.GONE
         holder.cardBatal.visibility = if (transaksi.status.equals("Pending", true) || transaksi.status.equals("DP", true)) View.VISIBLE else View.GONE
 
-//        // Klik tombol "Bayar"
-//        holder.cardBayar.setOnClickListener {
-//            listener.onBayarClicked(transaksi.snap_token)
-//        }
-//
-//        // Klik tombol "Batalkan"
-//        holder.cardBatal.setOnClickListener {
-//            listener.onBatalkanClicked(transaksi.id_reservasi)
-//        }
         holder.cardBayar.setOnClickListener {
             listener.onBayarClicked(transaksi.snap_token)
         }

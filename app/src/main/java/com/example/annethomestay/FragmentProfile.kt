@@ -18,6 +18,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 
 class FragmentProfile : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -50,10 +52,12 @@ class FragmentProfile : Fragment() {
         binding.profilePhone.setOnClickListener {
             showChangePhoneDialog()
         }
+        binding.exit.setOnClickListener{
+//            logout()
+            navigateToLogin()
+        }
         sessionManager = SessionManager(requireContext())
         userId = sessionManager.getUserId()
-
-        // Panggil fungsi untuk mengambil dan menampilkan data pengguna
 
     }
 
@@ -178,6 +182,8 @@ class FragmentProfile : Fragment() {
 
                 withContext(Dispatchers.Main) {
                     if (response.success) {
+                        val i = Intent(requireContext(), ActivityLogin::class.java)
+                        startActivity(i)
                         Toast.makeText(requireContext(), "Nomor telepon berhasil diubah", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
@@ -190,5 +196,48 @@ class FragmentProfile : Fragment() {
             }
         }
     }
+
+    private fun logout() {
+        val accessToken = sessionManager.getAccessToken()
+        if (accessToken.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "Token tidak ditemukan, silakan login ulang.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val token = "Bearer $accessToken"
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val apiService = ApiClient.apiService
+                val response = apiService.logout(token)
+
+                withContext(Dispatchers.Main) {
+                    if (response.success) {
+                        sessionManager.clear()
+                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
+//                        navigateToLogin()
+                    } else {
+                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    val errorMessage = when (e) {
+                        is HttpException -> "Kesalahan HTTP: ${e.response()?.message()}"
+                        is IOException -> "Kesalahan jaringan, periksa koneksi Anda."
+                        else -> "Terjadi kesalahan tidak terduga: ${e.message}"
+                    }
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(requireContext(), ActivityLogin::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
 
 }

@@ -60,12 +60,12 @@ class ActivityPesanKendaraan : AppCompatActivity() {
         UiKitApi.Builder()
             .withMerchantClientKey("SB-Mid-client-rTMPU8glYQjPkdDQ") // Client key dari Midtrans
             .withContext(this) // Konteks aktivitas
-            .withMerchantUrl("https://45e4-2001-448a-4040-9ce4-3029-1922-5aa6-9303.ngrok-free.app/api/midtrans/callback/") // Ganti dengan URL server untuk menangani callback
+            .withMerchantUrl("https://annet.nosveratu.com/api/midtrans/callback/") // Ganti dengan URL server untuk menangani callback
             .enableLog(true) // Aktifkan log SDK
             .withColorTheme(CustomColorTheme("#FFE51255", "#B61548", "#FFE51255")) // Tema warna
             .build()
 
-        setLocaleNew("en")
+        setLocaleNew("id")
 
         launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result?.resultCode == RESULT_OK) {

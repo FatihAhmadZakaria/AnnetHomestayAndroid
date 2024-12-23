@@ -51,6 +51,7 @@ dependencies {
     implementation (libs.retrofit2.converter.gson)
     implementation (libs.logging.interceptor)
     implementation ("com.midtrans:uikit:2.0.0-SANDBOX")
+//    implementation ("com.midtrans:uikit:2.0.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 }

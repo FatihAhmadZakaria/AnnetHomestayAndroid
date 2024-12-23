@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.100.100:8000/api/"
+    private const val BASE_URL = "https://annet.nosveratu.com/api/"
 
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY

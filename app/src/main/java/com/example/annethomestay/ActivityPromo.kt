@@ -21,7 +21,7 @@ class ActivityPromo : AppCompatActivity() {
         // Menerima data yang dikirim dari intent
         imgUrls = intent.getStringArrayListExtra("img_urls") ?: arrayListOf()
         val nama = intent.getStringExtra("nama")
-        val description = intent.getStringExtra("deskrip")
+        val description = intent.getStringExtra("deskripsi")
 
         // Menampilkan nama dan deskripsi promo
         binding.namaPromo.text = nama

@@ -49,7 +49,9 @@ class ActivityRegister : AppCompatActivity() {
             Log.d("Cek InputPH", phone)
         }
 
-
+        binding.icBack.setOnClickListener {
+            onBackPressed()
+        }
 
         binding.toLogin.setOnClickListener {
             val i = Intent(this, ActivityLogin::class.java)
