@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
@@ -49,6 +50,7 @@ class ActivityPesanPenginapan : AppCompatActivity() {
     private var checkinDate: LocalDate? = null
     private var checkoutDate: LocalDate? = null
     private var jumlahSewa: Int = 0
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +77,7 @@ class ActivityPesanPenginapan : AppCompatActivity() {
             if (result?.resultCode == RESULT_OK) {
                 result.data?.let {
                     val transactionResult = it.getParcelableExtra<TransactionResult>(UiKitConstants.KEY_TRANSACTION_RESULT)
-                    Toast.makeText(this, "Transaction ID: ${transactionResult?.transactionId}", Toast.LENGTH_LONG).show() // Tampilkan ID transaksi
+                    Log.d("MIDTRANS", "Transaction ID: ${transactionResult?.transactionId}")
                 }
             }
         }
@@ -134,26 +136,44 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                 // Simpan tanggal check-in ke variabel
                 checkinDate = LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
 
-                // Hitung jumlah hari jika checkoutDate sudah dipilih
-                updateHarga()
-                SessionManager(this@ActivityPesanPenginapan).saveTglMulai(selectedDate)
-            }
-        }
-
-        tglCheckout.setOnClickListener {
-            showDatePickerDialog { selectedDate ->
-                tglCheckout.text = selectedDate
+                // Atur tanggal checkout otomatis menjadi 1 hari setelah tanggal check-in
+                checkoutDate = checkinDate?.plusDays(1)
+                val autoCheckoutDate = checkoutDate?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                tglCheckout.text = autoCheckoutDate ?: "Tanggal tidak valid"
                 tglCheckout.setTextColor(Color.BLACK)
 
-                // Simpan tanggal check-out ke variabel
-                checkoutDate = LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                // Simpan tanggal-tanggal ke SessionManager
+                SessionManager(this@ActivityPesanPenginapan).saveTglMulai(selectedDate)
+                SessionManager(this@ActivityPesanPenginapan).saveTglSelesai(autoCheckoutDate.orEmpty())
 
-                // Hitung jumlah hari jika checkinDate sudah dipilih
+                // Hitung jumlah hari
                 updateHarga()
-                SessionManager(this@ActivityPesanPenginapan).saveTglSelesai(selectedDate)
-                Toast.makeText(this@ActivityPesanPenginapan, selectedDate, Toast.LENGTH_SHORT).show()
             }
         }
+
+
+        tglCheckout.setOnClickListener {
+            val localCheckinDate = checkinDate // Salin ke variabel lokal untuk mencegah perubahan di antara pemeriksaan
+            if (localCheckinDate != null) {
+                showDatePickerDialog(minDate = localCheckinDate.plusDays(1)) { selectedDate ->
+                    tglCheckout.text = selectedDate
+                    tglCheckout.setTextColor(Color.BLACK)
+
+                    // Simpan tanggal check-out ke variabel
+                    checkoutDate = LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+
+                    // Simpan tanggal checkout ke SessionManager
+                    SessionManager(this@ActivityPesanPenginapan).saveTglSelesai(selectedDate)
+
+                    // Hitung jumlah hari
+                    updateHarga()
+                    Log.d("SELECT_DATE", "Select Date: ${selectedDate}")
+                }
+            } else {
+                Toast.makeText(this@ActivityPesanPenginapan, "Pilih tanggal check-in terlebih dahulu", Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
         binding.btPesanPeng.setOnClickListener {
             updateHarga()
@@ -178,39 +198,32 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                             Log.d("API Response", "Response: $responseBody") // Menampilkan seluruh response
                             Log.d("API Response", "Response Code: ${response.code()}") // Menampilkan status code
                             if (responseBody?.success == true) {
-                                Toast.makeText(this@ActivityPesanPenginapan, "Reservasi berhasil", Toast.LENGTH_SHORT).show()
+                                Log.d("RESERVASI", "Reservasi berhasil")
                                 SessionManager(this@ActivityPesanPenginapan).saveReservasiId(responseBody.id_reservasi)
                                 val reservasiId = SessionManager(this@ActivityPesanPenginapan).getReservasiId()
 
                                 Log.d("Reservasi ID", "ID Reservasi yang disimpan: $reservasiId")
                                 bayarReservasi()
                             } else {
-                                Toast.makeText(this@ActivityPesanPenginapan, "Gagal melakukan reservasi", Toast.LENGTH_SHORT).show()
+                                Log.d("RESERVASI", "Gagal melakukan reservasi")
                             }
                         } else {
-                            Log.e("API Error", "Response Code: ${response.code()} - ${response.message()}")
-                            Toast.makeText(this@ActivityPesanPenginapan, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                            Log.e("API Error", "Response Code: ${response.code()} |Response Error ${response.message()}")
                         }
 
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        // Jika terjadi exception
-                        Toast.makeText(this@ActivityPesanPenginapan, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Log.d("RESERVASI", "Error: ${e.message}")
                     }
                 }
             }
         }
     }
 
-    private fun setLocaleNew(languageCode: String?) {
-        val locales = LocaleListCompat.forLanguageTags(languageCode)
-        AppCompatDelegate.setApplicationLocales(locales)
-    }
-
-    // Fungsi pilih tanggal
+    // Fungsi pilih tanggal dengan opsi tanggal minimum
     @SuppressLint("DefaultLocale")
-    private fun showDatePickerDialog(onDateSelected: (String) -> Unit) {
+    private fun showDatePickerDialog(minDate: LocalDate? = null, onDateSelected: (String) -> Unit) {
         val calendar = Calendar.getInstance()
 
         // Set tanggal saat ini
@@ -226,10 +239,16 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         }, year, month, day)
 
         // Mengatur tanggal minimum untuk memilih
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis() // Tidak dapat memilih tanggal sebelum hari ini
+        datePickerDialog.datePicker.minDate = minDate?.atStartOfDay(ZoneId.systemDefault())?.toEpochSecond()?.times(1000)
+            ?: System.currentTimeMillis()
 
         // Tampilkan DatePickerDialog
         datePickerDialog.show()
+    }
+
+    private fun setLocaleNew(languageCode: String?) {
+        val locales = LocaleListCompat.forLanguageTags(languageCode)
+        AppCompatDelegate.setApplicationLocales(locales)
     }
 
     // Plus minus jumlah
@@ -265,11 +284,11 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                 1
             }
         } else {
-            1 // Default menjadi 1 jika salah satu atau kedua tanggal tidak ada
+            1
         }
 
         if (daysBetween < 0) {
-            Toast.makeText(this, "Tanggal check-out harus setelah check-in!", Toast.LENGTH_SHORT).show()
+            Log.d("UPDATE_HARGA", "Tanggal check-out harus setelah check-in!")
             return
         }
 
@@ -300,7 +319,7 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         val idReservasi = SessionManager(this@ActivityPesanPenginapan).getReservasiId()
 
         if (idReservasi == 0) {
-            Toast.makeText(this, "ID Reservasi tidak ditemukan", Toast.LENGTH_SHORT).show()
+            Log.d("BAYAR", "ID Reservasi tidak ditemukan")
             return
         }
 
@@ -322,16 +341,15 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                             Toast.makeText(this@ActivityPesanPenginapan, "Pembayaran berhasil", Toast.LENGTH_SHORT).show()
                             startPayment(responseBody.snap_token)
                         } else {
-                            Toast.makeText(this@ActivityPesanPenginapan, "Pembayaran gagal", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@ActivityPesanPenginapan, "Pembayaran tercatat", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(this@ActivityPesanPenginapan, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Log.d("BAYAR", "Error: ${response.message()}")
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    // Jika terjadi exception
-                    Toast.makeText(this@ActivityPesanPenginapan, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Log.d("BAYAR", "Error: ${e.message}")
                 }
             }
         }
@@ -361,6 +379,7 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                             if (responseBody.success) {
                                 // Menampilkan ketersediaan jika sukses
                                 val ketersediaan = responseBody.ketersediaan
+                                Log.d("CekKetersediaan", "Ketersediaan: ${responseBody.ketersediaan}")
                                 binding.pengSlot.text = responseBody.ketersediaan.toString()
                                 ketersediaans = responseBody.ketersediaan
 
@@ -384,13 +403,10 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                                 }
 
                             } else {
-                                // Jika ketersediaan tidak tersedia, tampilkan pesan error
                                 Log.e("CekKetersediaan", "Error: ${responseBody.success}")
-                                Toast.makeText(this@ActivityPesanPenginapan, "Error: ${responseBody.success}", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Log.e("CekKetersediaan", "Response body is null")
-                            Toast.makeText(this@ActivityPesanPenginapan, "Response body is null", Toast.LENGTH_SHORT).show()
                         }
                     } else {
                         // Jika request gagal
@@ -407,7 +423,6 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                 // Menangani exception yang terjadi
                 withContext(Dispatchers.Main) {
                     Log.e("CekKetersediaan", "Error: ${e.message}")
-                    Toast.makeText(this@ActivityPesanPenginapan, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

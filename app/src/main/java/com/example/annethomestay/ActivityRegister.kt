@@ -40,7 +40,7 @@ class ActivityRegister : AppCompatActivity() {
             if (email.isNotEmpty() && namaDepan.isNotEmpty() && namaBelakang.isNotEmpty() && password.isNotEmpty() && phone.isNotEmpty() ) {
                 registerUser(email, namaDepan, namaBelakang, password, phone)
             } else {
-                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Semua kolom harus terisi", Toast.LENGTH_SHORT).show()
             }
             Log.d("Cek InputF", namaDepan)
             Log.d("Cek InputR", namaBelakang)

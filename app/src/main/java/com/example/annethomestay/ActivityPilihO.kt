@@ -39,11 +39,12 @@ class ActivityPilihO : AppCompatActivity() {
                     Log.d("ObjekWisataResponse", "Response JSON: ${response.body()}")
 
                     for (objek in objekList) {
-                        // Ambil gambar pertama sebagai thumbnail
-                        val imageUrl = "http://192.168.100.100:8000/api/images/${objek.img[0].img_path}"
-
-                        // Ambil semua gambar untuk dikirim ke detail halaman
-                        val imageUrls = objek.img.map { "http://192.168.100.100:8000/api/images/${it.img_path}" }
+                        // Validasi jika img kosong
+                        val imageUrls = if (!objek.img.isNullOrEmpty()) {
+                            objek.img.map { "https://annet.nosveratu.com/storage/app/public/${it.img_path}" }
+                        } else {
+                            emptyList()
+                        }
                         val fullImageUrlList = ArrayList(imageUrls)
 
                         val dataListRekomendasi = DataListRekomendasi(
@@ -66,6 +67,7 @@ class ActivityPilihO : AppCompatActivity() {
                 Log.d("gagal", "Panggilan API gagal: ${t.message}")
             }
         })
+
     }
 
     private fun setupListViewAdapter() {

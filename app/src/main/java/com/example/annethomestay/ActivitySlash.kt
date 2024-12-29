@@ -21,7 +21,8 @@ class ActivitySlash : AppCompatActivity() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val i = Intent(this, ActivityOpsiLogin::class.java)
+            val i = Intent(this, ActivityLogin::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(i)
 
             finish()

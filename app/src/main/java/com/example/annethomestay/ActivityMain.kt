@@ -1,16 +1,17 @@
 package com.example.annethomestay
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.annethomestay.databinding.ActivityMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ActivityMain : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var lastBackPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +34,6 @@ class ActivityMain : AppCompatActivity() {
                 else -> replaceFragment(FragmentHome(), "home")
             }
         } else {
-            // Load default fragment
             replaceFragment(FragmentHome(), "home")
         }
 
@@ -52,7 +52,24 @@ class ActivityMain : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_view, fragment)
-        fragmentTransaction.addToBackStack(tag)
-        fragmentTransaction.commit()
+        fragmentTransaction.commitAllowingStateLoss()
+    }
+
+    override fun onBackPressed() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_view)
+
+        if (currentFragment is FragmentHome) {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastBackPressedTime < 2000) {
+                super.onBackPressed()
+            } else {
+                lastBackPressedTime = currentTime
+                Toast.makeText(this, "Tekan kembali sekali lagi untuk keluar", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            binding.bottomNav.selectedItemId = R.id.home
+            replaceFragment(FragmentHome(), "home")
+        }
     }
 }
+

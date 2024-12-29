@@ -79,10 +79,11 @@ class ActivityLogin : AppCompatActivity() {
                         Toast.makeText(this@ActivityLogin, "Login successful, welcome!", Toast.LENGTH_SHORT).show()
 
                         val intent = Intent(this@ActivityLogin, ActivityMain::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         finish()
                     } else {
-                        Toast.makeText(this@ActivityLogin, "Login failed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ActivityLogin, "Email atau Kata sandi yang anda masukan salah", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {

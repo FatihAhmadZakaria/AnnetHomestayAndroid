@@ -42,7 +42,7 @@ class ActivityPilihP : AppCompatActivity() {
                     Log.d("PromoResponse", "Response JSON: ${response.body()}")
 
                     for (penginapan in penginapanList) {
-                        val imageUrls = penginapan.img.map { "http://192.168.100.100:8000/api/images/${it.img_path}" } // List gambar
+                        val imageUrls = penginapan.img.map { "https://annet.nosveratu.com/storage/app/public/${it.img_path}" } // List gambar
                         val fullImageUrlList = ArrayList(imageUrls)
 
                         val dataListPenginapan = DataListPenginapan(

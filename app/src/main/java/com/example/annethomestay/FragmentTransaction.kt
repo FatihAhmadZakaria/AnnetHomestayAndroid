@@ -17,7 +17,6 @@ import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
 import com.example.annethomestay.databinding.FragmentTransactionBinding
 import com.example.annethomestay.utils.SessionManager
-import com.midtrans.sdk.uikit.api.model.CustomColorTheme
 import com.midtrans.sdk.uikit.api.model.TransactionResult
 import com.midtrans.sdk.uikit.external.UiKitApi
 import com.midtrans.sdk.uikit.internal.util.UiKitConstants
@@ -61,8 +60,7 @@ class FragmentTransaction : Fragment() {
             .withMerchantClientKey("SB-Mid-client-rTMPU8glYQjPkdDQ") // Client key dari Midtrans
             .withContext(requireContext()) // Konteks aktivitas
             .withMerchantUrl("https://45e4-2001-448a-4040-9ce4-3029-1922-5aa6-9303.ngrok-free.app/api/midtrans/callback/") // Ganti dengan URL server untuk menangani callback
-            .enableLog(true) // Aktifkan log SDK
-            .withColorTheme(CustomColorTheme("#FFE51255", "#B61548", "#FFE51255")) // Tema warna
+            .enableLog(true)
             .build()
 
         setLocaleNew("en")

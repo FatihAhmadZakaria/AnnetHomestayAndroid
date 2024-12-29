@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
@@ -71,7 +72,7 @@ class ActivityPesanKendaraan : AppCompatActivity() {
             if (result?.resultCode == RESULT_OK) {
                 result.data?.let {
                     val transactionResult = it.getParcelableExtra<TransactionResult>(UiKitConstants.KEY_TRANSACTION_RESULT)
-                    Toast.makeText(this, "Transaction ID: ${transactionResult?.transactionId}", Toast.LENGTH_LONG).show() // Tampilkan ID transaksi
+                    Log.d("MIDTRANS", "Transaction ID: ${transactionResult?.transactionId}")
                 }
             }
         }
@@ -122,24 +123,40 @@ class ActivityPesanKendaraan : AppCompatActivity() {
                 // Simpan tanggal check-in ke variabel
                 checkinDate = LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
 
-                // Hitung jumlah hari jika checkoutDate sudah dipilih
-                updateHarga()
+                // Atur tanggal checkout otomatis menjadi 1 hari setelah tanggal check-in
+                checkoutDate = checkinDate?.plusDays(1)
+                val autoCheckoutDate = checkoutDate?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                tglCheckout.text = autoCheckoutDate ?: "Tanggal tidak valid"
+                tglCheckout.setTextColor(Color.BLACK)
+
+                // Simpan tanggal-tanggal ke SessionManager
                 SessionManager(this@ActivityPesanKendaraan).saveTglMulai(selectedDate)
+                SessionManager(this@ActivityPesanKendaraan).saveTglSelesai(autoCheckoutDate.orEmpty())
+
+                // Hitung jumlah hari
+                updateHarga()
             }
         }
 
         tglCheckout.setOnClickListener {
-            showDatePickerDialog { selectedDate ->
-                tglCheckout.text = selectedDate
-                tglCheckout.setTextColor(Color.BLACK)
+            val localCheckinDate = checkinDate // Salin ke variabel lokal untuk mencegah perubahan di antara pemeriksaan
+            if (localCheckinDate != null) {
+                showDatePickerDialog(minDate = localCheckinDate.plusDays(1)) { selectedDate ->
+                    tglCheckout.text = selectedDate
+                    tglCheckout.setTextColor(Color.BLACK)
 
-                // Simpan tanggal check-out ke variabel
-                checkoutDate = LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    // Simpan tanggal check-out ke variabel
+                    checkoutDate = LocalDate.parse(selectedDate, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
 
-                // Hitung jumlah hari jika checkinDate sudah dipilih
-                updateHarga()
-                SessionManager(this@ActivityPesanKendaraan).saveTglSelesai(selectedDate)
-                Toast.makeText(this@ActivityPesanKendaraan, selectedDate, Toast.LENGTH_SHORT).show()
+                    // Simpan tanggal checkout ke SessionManager
+                    SessionManager(this@ActivityPesanKendaraan).saveTglSelesai(selectedDate)
+
+                    // Hitung jumlah hari
+                    updateHarga()
+                    Log.d("SELECT_DATE", "Select Date: ${selectedDate}")
+                }
+            } else {
+                Toast.makeText(this@ActivityPesanKendaraan, "Pilih tanggal check-in terlebih dahulu", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -163,28 +180,26 @@ class ActivityPesanKendaraan : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful) {
                             val responseBody = response.body()
-                            Log.d("API Response", "Response: $responseBody") // Menampilkan seluruh response
-                            Log.d("API Response", "Response Code: ${response.code()}") // Menampilkan status code
+                            Log.d("API Response", "Response: $responseBody")
+                            Log.d("API Response", "Response Code: ${response.code()}")
                             if (responseBody?.success == true) {
-                                Toast.makeText(this@ActivityPesanKendaraan, "Reservasi berhasil", Toast.LENGTH_SHORT).show()
+                                Log.d("RESERVASI", "Reservasi berhasil")
                                 SessionManager(this@ActivityPesanKendaraan).saveReservasiId(responseBody.id_reservasi)
                                 val reservasiId = SessionManager(this@ActivityPesanKendaraan).getReservasiId()
 
                                 Log.d("Reservasi ID", "ID Reservasi yang disimpan: $reservasiId")
                                 bayarReservasi()
                             } else {
-                                Toast.makeText(this@ActivityPesanKendaraan, "Gagal melakukan reservasi", Toast.LENGTH_SHORT).show()
+                                Log.d("RESERVASI", "Gagal melakukan reservasi")
                             }
                         } else {
-                            Log.e("API Error", "Response Code: ${response.code()} - ${response.message()}")
-                            Toast.makeText(this@ActivityPesanKendaraan, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                            Log.e("API Error", "Response Code: ${response.code()} |Response Error ${response.message()}")
                         }
 
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        // Jika terjadi exception
-                        Toast.makeText(this@ActivityPesanKendaraan, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Log.d("RESERVASI", "Error: ${e.message}")
                     }
                 }
             }
@@ -195,9 +210,10 @@ class ActivityPesanKendaraan : AppCompatActivity() {
         val locales = LocaleListCompat.forLanguageTags(languageCode)
         AppCompatDelegate.setApplicationLocales(locales)
     }
-    // Fungsi pilih tanggal
+
+    // Fungsi pilih tanggal dengan opsi tanggal minimum
     @SuppressLint("DefaultLocale")
-    private fun showDatePickerDialog(onDateSelected: (String) -> Unit) {
+    private fun showDatePickerDialog(minDate: LocalDate? = null, onDateSelected: (String) -> Unit) {
         val calendar = Calendar.getInstance()
 
         // Set tanggal saat ini
@@ -213,7 +229,8 @@ class ActivityPesanKendaraan : AppCompatActivity() {
         }, year, month, day)
 
         // Mengatur tanggal minimum untuk memilih
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis() // Tidak dapat memilih tanggal sebelum hari ini
+        datePickerDialog.datePicker.minDate = minDate?.atStartOfDay(ZoneId.systemDefault())?.toEpochSecond()?.times(1000)
+            ?: System.currentTimeMillis()
 
         // Tampilkan DatePickerDialog
         datePickerDialog.show()
@@ -222,18 +239,20 @@ class ActivityPesanKendaraan : AppCompatActivity() {
     private fun updateHarga() {
         // Mengecek apakah checkinDate dan checkoutDate tidak null
         val daysBetween = if (checkinDate != null && checkoutDate != null) {
-            // Menghitung selisih hari jika kedua tanggal ada
-            ChronoUnit.DAYS.between(checkinDate, checkoutDate).toInt()
+            // Menghitung jumlah hari jika kedua tanggal ada
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ChronoUnit.DAYS.between(checkinDate, checkoutDate).toInt()
+            } else {
+                1
+            }
         } else {
-            // Jika salah satu atau kedua tanggal tidak ada, set default menjadi 1
             1
         }
 
         if (daysBetween < 0) {
-            Toast.makeText(this, "Tanggal check-out harus setelah check-in!", Toast.LENGTH_SHORT).show()
+            Log.d("UPDATE_HARGA", "Tanggal check-out harus setelah check-in!")
         } else {
-            // Menampilkan jumlah hari menginap
-            Toast.makeText(this, "Jumlah hari menginap: $daysBetween hari", Toast.LENGTH_SHORT).show()
+            Log.d("UPDATE_HARGA", "Jumlah hari menginap: $daysBetween hari")
         }
 
         // Mengambil harga dari intent dan menghitung jumlah DP
@@ -266,7 +285,7 @@ class ActivityPesanKendaraan : AppCompatActivity() {
         val idReservasi = SessionManager(this@ActivityPesanKendaraan).getReservasiId()
 
         if (idReservasi == 0) {
-            Toast.makeText(this, "ID Reservasi tidak ditemukan", Toast.LENGTH_SHORT).show()
+            Log.d("BAYAR", "ID Reservasi tidak ditemukan")
             return
         }
 
@@ -288,16 +307,15 @@ class ActivityPesanKendaraan : AppCompatActivity() {
                             Toast.makeText(this@ActivityPesanKendaraan, "Pembayaran berhasil", Toast.LENGTH_SHORT).show()
                             startPayment(responseBody.snap_token)
                         } else {
-                            Toast.makeText(this@ActivityPesanKendaraan, "Pembayaran gagal", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@ActivityPesanKendaraan, "Pembayaran tercatat", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(this@ActivityPesanKendaraan, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Log.d("BAYAR", "Error: ${response.message()}")
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    // Jika terjadi exception
-                    Toast.makeText(this@ActivityPesanKendaraan, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Log.d("BAYAR", "Error: ${e.message}")
                 }
             }
         }
@@ -333,7 +351,6 @@ class ActivityPesanKendaraan : AppCompatActivity() {
                                 // Menampilkan ketersediaan jika sukses
                                 val ketersediaan = responseBody.ketersediaan
                                 Log.d("CekKetersediaan", "Ketersediaan: ${responseBody.ketersediaan}")
-                                Toast.makeText(this@ActivityPesanKendaraan, "Ketersediaan: ${responseBody.ketersediaan}", Toast.LENGTH_SHORT).show()
                                 binding.statusKendaraan.text = responseBody.ketersediaan.toString()
                                 // Validasi ketersediaan
                                 if (ketersediaan == "Tidak Tersedia") {
@@ -348,25 +365,18 @@ class ActivityPesanKendaraan : AppCompatActivity() {
                                     binding.btPesanKen.setBackgroundResource(R.drawable.bt_rounded)
                                 }
                             } else {
-                                // Jika ketersediaan tidak tersedia, tampilkan pesan error
                                 Log.e("CekKetersediaan", "Error: ${responseBody.success}")
-                                Toast.makeText(this@ActivityPesanKendaraan, "Error: ${responseBody.success}", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Log.e("CekKetersediaan", "Response body is null")
-                            Toast.makeText(this@ActivityPesanKendaraan, "Response body is null", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        // Jika request gagal
                         Log.e("CekKetersediaan", "Request gagal dengan status: ${response.code()}")
-                        Toast.makeText(this@ActivityPesanKendaraan, "Request gagal dengan status: ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
-                // Menangani exception yang terjadi
                 withContext(Dispatchers.Main) {
                     Log.e("CekKetersediaan", "Error: ${e.message}")
-                    Toast.makeText(this@ActivityPesanKendaraan, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -21,7 +21,7 @@
                 android:id="@+id/profile_img"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
-                android:src="@drawable/guts"
+                android:src="@drawable/profile_icon"
                 app:shapeAppearanceOverlay="@style/CircleImageViewStyle"
                 android:layout_margin="10dp"/>
             <LinearLayout

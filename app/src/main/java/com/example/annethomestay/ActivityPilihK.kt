@@ -42,7 +42,7 @@ class ActivityPilihK : AppCompatActivity() {
                     Log.d("KendaraanResponse", "Response JSON: ${response.body()}")
 
                     for (kendaraan in kendaraanList) {
-                        val imageUrls = kendaraan.img.map { "http://192.168.100.100:8000/api/images/${it.img_path}" } // List gambar
+                        val imageUrls = kendaraan.img.map { "https://annet.nosveratu.com/storage/app/public/${it.img_path}" } // List gambar
                         val fullImageUrlList = ArrayList(imageUrls)
 
                         val dataListKendaraan = DataListKendaraan(

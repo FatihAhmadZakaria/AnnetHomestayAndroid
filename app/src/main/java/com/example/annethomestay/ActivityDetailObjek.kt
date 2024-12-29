@@ -30,7 +30,6 @@ class ActivityDetailObjek : AppCompatActivity() {
         val imgKendaraan = intent.getStringArrayListExtra("img") ?: arrayListOf()
         binding.nameObj.text = intent.getStringExtra("nama")
         binding.deskripObj.text = intent.getStringExtra("deskrip")
-        val link = intent.getStringExtra("link")
 
         val flipper: ViewFlipper = findViewById(R.id.slider_objek)
 

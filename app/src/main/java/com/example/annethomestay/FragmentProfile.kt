@@ -4,6 +4,7 @@ import PasswordUpdateRequest
 import PhoneUpdateRequest
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +54,7 @@ class FragmentProfile : Fragment() {
             showChangePhoneDialog()
         }
         binding.exit.setOnClickListener{
-//            logout()
+            logout()
             navigateToLogin()
         }
         sessionManager = SessionManager(requireContext())
@@ -182,8 +183,6 @@ class FragmentProfile : Fragment() {
 
                 withContext(Dispatchers.Main) {
                     if (response.success) {
-                        val i = Intent(requireContext(), ActivityLogin::class.java)
-                        startActivity(i)
                         Toast.makeText(requireContext(), "Nomor telepon berhasil diubah", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
@@ -213,9 +212,17 @@ class FragmentProfile : Fragment() {
 
                 withContext(Dispatchers.Main) {
                     if (response.success) {
+                        // Clear SharedPreferences
                         sessionManager.clear()
+                        // Ensure clear was successful by checking values
+                        Log.d("SessionManager", "AccessToken after clear: ${sessionManager.getAccessToken()}")
+                        sessionManager.getAccessToken()?.let {
+                            if (it == null) {
+                                Log.d("SessionManager", "Successfully cleared access token")
+                            }
+                        }
                         Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
-//                        navigateToLogin()
+                        navigateToLogin()
                     } else {
                         Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
                     }
