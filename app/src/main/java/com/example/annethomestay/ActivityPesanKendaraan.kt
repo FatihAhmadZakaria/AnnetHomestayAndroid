@@ -162,14 +162,14 @@ class ActivityPesanKendaraan : AppCompatActivity() {
 
         binding.btPesanKen.setOnClickListener {
             updateHarga()
-            val jumlahPesan = jumlahSewa
+//            val jumlahPesan = jumlahSewa
             val reservasiRequest = ReservasiRequest(
                 id_user = idUser,
                 id_produk = idProduk,
                 tipe_produk = tipeProduk,
                 tgl_mulai = tglCheckin.text.toString(),
                 tgl_selesai = tglCheckout.text.toString(),
-                jumlah_pesan = jumlahPesan
+                jumlah_pesan = 1
             )
 
             // Mengirimkan request menggunakan Retrofit

@@ -178,13 +178,22 @@ class ActivityPesanPenginapan : AppCompatActivity() {
         binding.btPesanPeng.setOnClickListener {
             updateHarga()
             val jumlahPesan = jumlahSewa
+
+            // Log untuk memeriksa nilai yang akan diposting
+            Log.d("Reservasi Request", "ID User: $idUser")
+            Log.d("Reservasi Request", "ID Produk: $idProduk")
+            Log.d("Reservasi Request", "Tipe Produk: $tipeProduk")
+            Log.d("Reservasi Request", "Tanggal Mulai: ${tglCheckin.text}")
+            Log.d("Reservasi Request", "Tanggal Selesai: ${tglCheckout.text}")
+            Log.d("Reservasi Request", "Jumlah Pesan: $durasi")
+
             val reservasiRequest = ReservasiRequest(
                 id_user = idUser,
                 id_produk = idProduk,
                 tipe_produk = tipeProduk,
                 tgl_mulai = tglCheckin.text.toString(),
                 tgl_selesai = tglCheckout.text.toString(),
-                jumlah_pesan = jumlahPesan
+                jumlah_pesan = durasi
             )
 
             // Mengirimkan request menggunakan Retrofit
@@ -202,7 +211,7 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                                 SessionManager(this@ActivityPesanPenginapan).saveReservasiId(responseBody.id_reservasi)
                                 val reservasiId = SessionManager(this@ActivityPesanPenginapan).getReservasiId()
 
-                                Log.d("Reservasi ID", "ID Reservasi yang disimpan: $reservasiId")
+                                Log.d("Reservasi", "Tgl in: ${tglCheckin}, Tgl out: ${tglCheckout}, Jml: ${jumlahPesan}")
                                 bayarReservasi()
                             } else {
                                 Log.d("RESERVASI", "Gagal melakukan reservasi")
@@ -219,6 +228,7 @@ class ActivityPesanPenginapan : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     // Fungsi pilih tanggal dengan opsi tanggal minimum
@@ -276,35 +286,45 @@ class ActivityPesanPenginapan : AppCompatActivity() {
     }
 
     private fun updateHarga() {
+        // Pastikan tanggal check-in dan check-out ada dan valid
         val daysBetween = if (checkinDate != null && checkoutDate != null) {
-            // Menghitung jumlah hari jika kedua tanggal ada
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                ChronoUnit.DAYS.between(checkinDate, checkoutDate).toInt()
+                val days = ChronoUnit.DAYS.between(checkinDate, checkoutDate).toInt()
+                if (days < 1) {
+                    // Pastikan durasi minimal 1 hari
+                    Log.d("UPDATE_HARGA", "Tanggal check-out harus lebih besar dari tanggal check-in!")
+                    return
+                }
+                days
             } else {
-                1
+                1 // Versi lama, asumsikan 1 hari
             }
         } else {
-            1
+            1 // Jika tanggal tidak ada, default 1 hari
         }
 
-        if (daysBetween < 0) {
-            Log.d("UPDATE_HARGA", "Tanggal check-out harus setelah check-in!")
-            return
-        }
+        // Ambil harga per hari dari intent
+        val hargaPerHari = intent.getIntExtra("harga", 0)
 
-        val jumlahPesanan = binding.durasi.text.toString().toInt()
-        val harga = intent.getIntExtra("harga", 0)
-        val jumlahDpSatuan = (harga * 0.1).toInt()
-        val jumlahDp = jumlahDpSatuan * jumlahPesanan * daysBetween
-        jumlahSewa = jumlahPesanan * daysBetween // Menyimpan jumlah sewa di tingkat kelas
+        // Hitung total DP (10% dari harga per hari)
+        val jumlahDpSatuan = (hargaPerHari * 0.1).toInt()
 
-        binding.pengTotal.text = jumlahDp.toString()
+        // Hitung total DP berdasarkan jumlah hari yang disewa dan jumlah unit
+        val jumlahDp = jumlahDpSatuan * durasi * daysBetween
 
+        // Menampilkan harga total pada UI
+        binding.pengTotal.text = "Rp $jumlahDp"
+
+        // Simpan jumlah sewa untuk penggunaan lebih lanjut
+        jumlahSewa = durasi * daysBetween
+
+        // Memastikan ketersediaan dan status tombol pesanan
         val tglCI = SessionManager(this@ActivityPesanPenginapan).getTglMulai()
         val tglCO = SessionManager(this@ActivityPesanPenginapan).getTglSelesai()
         val idReservasi = SessionManager(this@ActivityPesanPenginapan).getIdProperti()
         cekKetersediaan(idProperti = idReservasi, tglMulai = tglCI, tglSelesai = tglCO)
     }
+
 
     private fun bayarReservasi() {
         updateHarga()
