@@ -1,6 +1,5 @@
 package com.example.annethomestay
 
-
 import RegisterRequest
 import android.content.Intent
 import android.os.Bundle
@@ -37,11 +36,16 @@ class ActivityRegister : AppCompatActivity() {
             val password = binding.registerPassword.text.toString()
             val phone = binding.registerPhone.text.toString()
 
-            if (email.isNotEmpty() && namaDepan.isNotEmpty() && namaBelakang.isNotEmpty() && password.isNotEmpty() && phone.isNotEmpty() ) {
-                registerUser(email, namaDepan, namaBelakang, password, phone)
+            if (email.isNotEmpty() && namaDepan.isNotEmpty() && namaBelakang.isNotEmpty() && password.isNotEmpty() && phone.isNotEmpty()) {
+                if (password.length >= 6) {
+                    registerUser(email, namaDepan, namaBelakang, password, phone)
+                } else {
+                    Toast.makeText(this, "Password minimal harus 6 karakter", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 Toast.makeText(this, "Semua kolom harus terisi", Toast.LENGTH_SHORT).show()
             }
+
             Log.d("Cek InputF", namaDepan)
             Log.d("Cek InputR", namaBelakang)
             Log.d("Cek InputE", email)

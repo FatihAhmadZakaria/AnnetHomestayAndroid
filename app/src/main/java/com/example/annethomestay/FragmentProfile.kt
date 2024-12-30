@@ -149,6 +149,11 @@ class FragmentProfile : Fragment() {
     }
 
     private fun changePassword(currentPass: String, newPass: String) {
+        if (newPass.length < 6) {
+            Toast.makeText(requireContext(), "Password baru harus minimal 6 karakter", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val token = "Bearer ${sessionManager.getAccessToken()}" // Dapatkan token dari SessionManager
         val passwordRequest = PasswordUpdateRequest(sandi_lama = currentPass, sandi_baru = newPass)
 
@@ -166,13 +171,19 @@ class FragmentProfile : Fragment() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Password lama salah, silahkan coba beberapa saat lagi", Toast.LENGTH_SHORT).show()
+                    Log.d("PASSWORD", "changePassword: ${e.message}")
                 }
             }
         }
     }
 
     private fun changePhone(currentPhone: String, newPhone: String) {
+        if (newPhone.length < 10) {
+            Toast.makeText(requireContext(), "Nomor telepon baru harus minimal 10 karakter", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val token = "Bearer ${sessionManager.getAccessToken()}" // Dapatkan token dari SessionManager
         val phoneRequest = PhoneUpdateRequest(no_lama = currentPhone, no_baru = newPhone)
 
@@ -190,11 +201,13 @@ class FragmentProfile : Fragment() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Nomor telepon lama salah, silahkan coba beberapa saat lagi", Toast.LENGTH_SHORT).show()
+                    Log.d("PHONE", "changePhone: ${e.message}")
                 }
             }
         }
     }
+
 
     private fun logout() {
         val accessToken = sessionManager.getAccessToken()
